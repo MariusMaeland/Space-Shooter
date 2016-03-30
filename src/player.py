@@ -68,6 +68,6 @@ class Player(pygame.sprite.Sprite):
 		self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
 		self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
 		self.speed = max(0, self.speed-0.2)
-
+	
 	def draw(self, screen):
 		pass

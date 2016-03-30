@@ -2,7 +2,6 @@ import pygame
 
 class Bullet(pygame.sprite.Sprite):
 	"""Constructor, creates a bullet fired by one of the two players."""
-
 	def __init__(self):
 		""" Constructor. Creates a bullet. Takes a
 		preloaded image as imagetype. """
