@@ -27,6 +27,8 @@ class Player(pygame.sprite.Sprite):
 		self.thrusting = False
 		# Various ammo-related stuff
 		self.ammo = 100000
+		self.last_shot = 0
+		self.rate_of_fire = 200
 
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
@@ -37,24 +39,21 @@ class Player(pygame.sprite.Sprite):
 	def fire(self, all_sprites_list):
 		"""Fires a shot, takes in all_sprites_list to get access to the group"""
 		
-		#if (pygame.time.get_ticks()-self.last_shot) > (self.delay_of_fire):
-		if self.ammo:
-			# Restrain the rate of fire
-			bullet = Bullet()
-			#game.lasersound.play()
-			bullet.rect.centerx = self.rect.centerx
-			bullet.rect.centery = self.rect.centery
-			# Calculate vectors:
-			actual_angle = self.dir
-			actual_angle %= 360
-			bullet.xspeed = math.cos(math.radians(actual_angle)) * 10
-			bullet.yspeed = math.sin(math.radians(actual_angle)) * -10
-        	# Add the bullets to the lists
-			all_sprites_list.add(bullet)
-			#game.bullets_list.add(bullet)
-			#self.last_shot = pygame.time.get_ticks()
-			# Decrease the ammo count
-			self.ammo -= 1
+		# Restrain the rate of fire
+		if (pygame.time.get_ticks()-self.last_shot) > (self.rate_of_fire):
+			if self.ammo:
+				bullet = Bullet()
+				#game.lasersound.play()
+				bullet.rect.centerx = self.rect.centerx
+				bullet.rect.centery = self.rect.centery
+				# Calculate vectors:
+				bullet.xspeed = math.cos(math.radians(self.dir)) * 10
+				bullet.yspeed = math.sin(math.radians(self.dir)) * -10
+	        	# Add the bullets to the lists
+				all_sprites_list.add(bullet)
+				self.last_shot = pygame.time.get_ticks()
+				# Decrease the ammo count
+				self.ammo -= 1
 
 	def turnLeft(self):
 		"""Turns the ship to the left"""
