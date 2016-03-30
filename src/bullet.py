@@ -7,13 +7,13 @@ class Bullet(pygame.sprite.Sprite):
 		""" Constructor. Creates a bullet. Takes a
 		preloaded image as imagetype. """
 		super().__init__()
-		self.origimage = pygame.image.load("images/bullets.png").convert_alpha()
+		self.origimage = pygame.image.load("images/bullet.png").convert_alpha()
 		self.image = self.origimage.copy()
 		self.rect = self.image.get_rect()
 		self.bullet = []
 		# Cut from the spritesheet and add them to the bullet-spritelist.
-		for i in range(30):
-			self.bullet.append(self.image.subsurface((i*64, 0, 64, 64)))
+		for i in range(15):
+			self.bullet.append(self.image.subsurface((i*20, 0, 20, 20)))
 		self.yspeed = 0
 		self.xspeed = 0
 		self.dir = 0
@@ -41,7 +41,7 @@ class Bullet(pygame.sprite.Sprite):
 		#use pygame.transform.rotate(<image_to_rotate>, <turn_degrees>)
 		sprite.image = pygame.transform.rotate(sprite.bullet[sprite.nr], degrees)
 		sprite.nr += 1
-		sprite.nr %= 30
+		sprite.nr %= 15
 		#get new Rect
 		sprite.rect = sprite.image.get_rect()
 		#set new center to original center
