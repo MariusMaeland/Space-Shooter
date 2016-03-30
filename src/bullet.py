@@ -7,7 +7,7 @@ class Bullet(pygame.sprite.Sprite):
 		""" Constructor. Creates a bullet. Takes a
 		preloaded image as imagetype. """
 		super().__init__()
-		self.origimage = pygame.image.load("bullets.png").convert_alpha()
+		self.origimage = pygame.image.load("images/bullets.png").convert_alpha()
 		self.image = self.origimage.copy()
 		self.rect = self.image.get_rect()
 		self.bullet = []
