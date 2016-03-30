@@ -9,18 +9,18 @@ class Player(pygame.sprite.Sprite):
 		""" Constructor. Creates a player. """
 		super().__init__()
 		# Set the starting image
-		self.origimage = pygame.transform.scale(pygame.image.load("images/ship1.png"), (100, 100))
+		self.origimage = pygame.transform.scale(pygame.image.load("images/ship1.png"), (50, 50))
 		self.image = self.origimage.copy()
 		self.rect = self.image.get_rect()
 		self.rect.center = (100, SCREENHEIGHT//2)
 		# Load the image for the thruster-flame
-		self.thrusterimage = pygame.image.load("images/thruster.png").convert_alpha()
+		self.thrusterimage = pygame.image.load("images/jetflame.png").convert_alpha()
 		self.thruster = []
-		self.thruster_width = 442//6
+		self.thruster_width = 1920//30
 		self.nr = 0
 		# Cut from the spritesheet and add them to the thruster-list.
-		for x in range(6):
-			self.thruster.append(self.thrusterimage.subsurface((0, x*self.thruster_width, 140, self.thruster_width)))
+		for i in range(30):
+			self.thruster.append(self.thrusterimage.subsurface((i*self.thruster_width, 0, self.thruster_width, self.thruster_width)))
 		# Various attributes
 		self.dir = 0
 		self.speed = 0
@@ -41,7 +41,8 @@ class Player(pygame.sprite.Sprite):
 			# Restrain the rate of fire
 			bullet = Bullet()
 			#game.lasersound.play()
-			bullet.rect.center = self.rect.center
+			bullet.rect.centerx = self.rect.centerx - 10
+			bullet.rect.centery = self.rect.centery - 25
 			# Calculate vectors:
 			actual_angle = self.dir
 			actual_angle %= 360
@@ -78,9 +79,9 @@ class Player(pygame.sprite.Sprite):
 		flamey_ship = pygame.Surface((400, 200))
 		#pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
 		if sprite.thrusting:
-			flamey_ship.blit(sprite.thruster[sprite.nr], (25, 60))
+			flamey_ship.blit(sprite.thruster[sprite.nr], (100, 43))
 		sprite.nr += 1
-		sprite.nr %= 6
+		sprite.nr %= 30
 		flamey_ship.blit(sprite.origimage, (150,50))
 		flamey_ship.set_colorkey((0,0,0))
 		#use pygame.transform.rotate(<image_to_rotate>, <turn_degrees>)
