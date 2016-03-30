@@ -1,5 +1,7 @@
 import pygame
-from bullet import *
+from bullet import Bullet
+from functions import *
+
 
 class Player(pygame.sprite.Sprite):
 
@@ -7,11 +9,11 @@ class Player(pygame.sprite.Sprite):
 		""" Constructor. Creates a player. """
 		super().__init__()
 		# Set the starting image
-		self.origimage = pygame.transform.scale(pygame.image.load("mship1.png"), (100, 100))
+		self.origimage = pygame.transform.scale(pygame.image.load("images/ship1.png"), (100, 100))
 		self.image = self.origimage.copy()
 		self.rect = self.image.get_rect()
 		# Load the image for the thruster-flame
-		self.thrusterimage = pygame.image.load("thruster.png").convert_alpha()
+		self.thrusterimage = pygame.image.load("images/thruster.png").convert_alpha()
 		self.thruster = []
 		self.thruster_width = 442//6
 		self.nr = 0
