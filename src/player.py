@@ -39,7 +39,7 @@ class Player(pygame.sprite.Sprite):
 			# Restrain the rate of fire
 			bullet = Bullet()
 			#game.lasersound.play()
-			bullet.rect.center = game.player.rect.center
+			bullet.rect.center = self.rect.center
 			# Calculate vectors:
 			actual_angle = self.dir
 			actual_angle %= 360
