@@ -1,4 +1,4 @@
-
+import pygame
 
 class Bullet(pygame.sprite.Sprite):
 	"""Constructor, creates a bullet fired by one of the two players."""
