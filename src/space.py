@@ -3,7 +3,6 @@ import random
 import math
 import itertools
 from variables import *
-from spritesheetfunctions import SpriteSheet
 
 
 class Player(pygame.sprite.Sprite):
