@@ -7,3 +7,5 @@ så skriv du git checkout master
 git pull
 git merge dev
 så pushe du master til skyen
+
+sjekk at du står i branch master - git branch --all
