@@ -25,6 +25,7 @@ class Player(pygame.sprite.Sprite):
 		self.dir = 0
 		self.speed = 0
 		self.thrusting = False
+		# Various ammo-related stuff
 		self.ammo = 100000
 
 	def thrust(self):
@@ -41,8 +42,8 @@ class Player(pygame.sprite.Sprite):
 			# Restrain the rate of fire
 			bullet = Bullet()
 			#game.lasersound.play()
-			bullet.rect.centerx = self.rect.centerx - 10
-			bullet.rect.centery = self.rect.centery - 25
+			bullet.rect.centerx = self.rect.centerx
+			bullet.rect.centery = self.rect.centery
 			# Calculate vectors:
 			actual_angle = self.dir
 			actual_angle %= 360
@@ -76,13 +77,13 @@ class Player(pygame.sprite.Sprite):
 		"""Rotating the image and rect"""
 		#get original center because new Rect center will change with image transformation
 		oldCenter = sprite.rect.center
-		flamey_ship = pygame.Surface((400, 200))
-		#pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
+		flamey_ship = pygame.Surface((200, 100))
+		pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
 		if sprite.thrusting:
-			flamey_ship.blit(sprite.thruster[sprite.nr], (100, 43))
+			flamey_ship.blit(sprite.thruster[sprite.nr], (25, 20))
 		sprite.nr += 1
 		sprite.nr %= 30
-		flamey_ship.blit(sprite.origimage, (150,50))
+		flamey_ship.blit(sprite.origimage, (75,25))
 		flamey_ship.set_colorkey((0,0,0))
 		#use pygame.transform.rotate(<image_to_rotate>, <turn_degrees>)
 		sprite.image = pygame.transform.rotate(flamey_ship, degrees)
