@@ -37,7 +37,9 @@ class Player(pygame.sprite.Sprite):
 			self.thrusting = False
 
 	def fire(self, all_sprites_list):
-		"""Fires a shot, takes in all_sprites_list to get access to the group"""
+		"""Fires a shot, takes in all_sprites_list to get access to the group
+		Firing is limited by the self.rate of fire(compulsory time in milliseconds
+		between each shot). """
 		
 		# Restrain the rate of fire
 		if (pygame.time.get_ticks()-self.last_shot) > (self.rate_of_fire):
