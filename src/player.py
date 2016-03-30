@@ -31,8 +31,8 @@ class Player(pygame.sprite.Sprite):
 			self.speed = min(7, self.speed+1)
 			self.thrusting = False
 
-	def fire(self):
-		"""Fires a shot"""
+	def fire(self, all_sprites_list):
+		"""Fires a shot, takes in all_sprites_list to get access to the group"""
 		
 		#if (pygame.time.get_ticks()-self.last_shot) > (self.delay_of_fire):
 		if self.ammo:
@@ -46,7 +46,7 @@ class Player(pygame.sprite.Sprite):
 			bullet.xspeed = math.cos(math.radians(actual_angle)) * 5
 			bullet.yspeed = math.sin(math.radians(actual_angle)) * -5
         	# Add the bullets to the lists
-			game.all_sprites_list.add(bullet)
+			all_sprites_list.add(bullet)
 			#game.bullets_list.add(bullet)
 			#self.last_shot = pygame.time.get_ticks()
 			# Decrease the ammo count
