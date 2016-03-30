@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
 		# Various ammo-related stuff
 		self.ammo = 100000
 		self.last_shot = 0
-		self.rate_of_fire = 200
+		self.rate_of_fire = 500
 
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
