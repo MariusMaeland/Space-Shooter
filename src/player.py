@@ -2,7 +2,6 @@ import pygame
 from bullet import Bullet
 from functions import *
 
-
 class Player(pygame.sprite.Sprite):
 
 	def __init__(self):
