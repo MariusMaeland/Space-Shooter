@@ -36,8 +36,11 @@ class Game():
 				print(self.joystick_name)
 		
 		self.all_sprites_list = pygame.sprite.Group()
-		self.player = Player()
+		self.player = Player(50, SCREENHEIGHT//2)
 		self.all_sprites_list.add(self.player)
+		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2)
+		self.all_sprites_list.add(self.player2)
+		print (self.all_sprites_list)
 
 	
 
@@ -52,8 +55,6 @@ class Game():
 		# Quit:
 		if self.pressed[pygame.K_ESCAPE]:
 			exit()
-		if self.pressed[pygame.K_a]:
-			self.player.animate(self.screen)
 		if self.pressed[pygame.K_RIGHT]:
 			self.player.turnRight()
 		if self.pressed[pygame.K_LEFT]:
@@ -62,6 +63,15 @@ class Game():
 			self.player.thrusting = True
 		if self.pressed[pygame.K_KP0]:
 			self.player.fire(self.all_sprites_list)
+
+		if self.pressed[pygame.K_d]:
+			self.player2.turnRight()
+		if self.pressed[pygame.K_a]:
+			self.player2.turnLeft()
+		if self.pressed[pygame.K_w]:
+			self.player2.thrusting = True
+		if self.pressed[pygame.K_q]:
+			self.player2.fire(self.all_sprites_list)
 		
 
 

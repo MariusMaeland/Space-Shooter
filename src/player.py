@@ -5,14 +5,14 @@ from variables import *
 
 class Player(pygame.sprite.Sprite):
 
-	def __init__(self):
+	def __init__(self, startx, starty):
 		""" Constructor. Creates a player. """
 		super().__init__()
 		# Set the starting image
 		self.origimage = pygame.transform.scale(pygame.image.load("images/ship1.png"), (50, 50))
 		self.image = self.origimage.copy()
 		self.rect = self.image.get_rect()
-		self.rect.center = (100, SCREENHEIGHT//2)
+		self.rect.center = (startx, starty)
 		# Load the image for the thruster-flame
 		self.thrusterimage = pygame.image.load("images/jetflame.png").convert_alpha()
 		self.thruster = []
