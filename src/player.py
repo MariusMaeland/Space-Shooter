@@ -1,6 +1,7 @@
 import pygame
 from bullet import Bullet
 import math
+from variables import *
 
 class Player(pygame.sprite.Sprite):
 
@@ -11,6 +12,7 @@ class Player(pygame.sprite.Sprite):
 		self.origimage = pygame.transform.scale(pygame.image.load("images/ship1.png"), (100, 100))
 		self.image = self.origimage.copy()
 		self.rect = self.image.get_rect()
+		self.rect.center = (100, SCREENHEIGHT//2)
 		# Load the image for the thruster-flame
 		self.thrusterimage = pygame.image.load("images/thruster.png").convert_alpha()
 		self.thruster = []
