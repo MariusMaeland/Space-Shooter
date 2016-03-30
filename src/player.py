@@ -1,6 +1,6 @@
 import pygame
 from bullet import Bullet
-from functions import *
+import math
 
 class Player(pygame.sprite.Sprite):
 
@@ -43,8 +43,8 @@ class Player(pygame.sprite.Sprite):
 			# Calculate vectors:
 			actual_angle = self.dir
 			actual_angle %= 360
-			bullet.xspeed = math.cos(math.radians(actual_angle)) * 5
-			bullet.yspeed = math.sin(math.radians(actual_angle)) * -5
+			bullet.xspeed = math.cos(math.radians(actual_angle)) * 10
+			bullet.yspeed = math.sin(math.radians(actual_angle)) * -10
         	# Add the bullets to the lists
 			all_sprites_list.add(bullet)
 			#game.bullets_list.add(bullet)
@@ -62,12 +62,31 @@ class Player(pygame.sprite.Sprite):
 		self.dir -= 5
 		self.dir %= 360
 
-	def update(self):
-		rotate_sprite(self, self.dir)
+	def update(self, screen):
+		self.rotate_sprite(self.dir)
 		self.thrust()
 		self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
 		self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
 		self.speed = max(0, self.speed-0.2)
+
+	def rotate_sprite(sprite, degrees):
+		"""Rotating the image and rect"""
+		#get original center because new Rect center will change with image transformation
+		oldCenter = sprite.rect.center
+		flamey_ship = pygame.Surface((400, 200))
+		#pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
+		if sprite.thrusting:
+			flamey_ship.blit(sprite.thruster[sprite.nr], (25, 60))
+		sprite.nr += 1
+		sprite.nr %= 6
+		flamey_ship.blit(sprite.origimage, (150,50))
+		flamey_ship.set_colorkey((0,0,0))
+		#use pygame.transform.rotate(<image_to_rotate>, <turn_degrees>)
+		sprite.image = pygame.transform.rotate(flamey_ship, degrees)
+		#get new Rect
+		sprite.rect = sprite.image.get_rect()
+		#set new center to original center
+		sprite.rect.center = oldCenter
 	
 	def draw(self, screen):
 		pass

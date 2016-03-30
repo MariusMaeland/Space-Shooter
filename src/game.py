@@ -75,7 +75,7 @@ class Game():
 					self.screen.blit(self.background, (0, 0))
 					# Handling events
 					self.eventhandler()
-					self.all_sprites_list.update()
+					self.all_sprites_list.update(self.screen)
 					self.all_sprites_list.draw(self.screen)
 					pygame.display.flip()
 					# Limit to 60 frames per second
