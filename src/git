@@ -4,5 +4,6 @@ så skriv du git checkout dev
 så gjør du endringen dine der
 når du har gjort endringen, så commite du dem
 så skriv du git checkout master
+git pull
 git merge dev
 så pushe du master til skyen
