@@ -1,6 +1,7 @@
 import pygame
 from bullet import Bullet
 import math
+import random
 from variables import *
 
 class Player(pygame.sprite.Sprite):
