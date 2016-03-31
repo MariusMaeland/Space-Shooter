@@ -17,8 +17,10 @@ class Player(pygame.sprite.Sprite):
 		# Load the image for the thruster-flame
 		self.thrusterimage = pygame.image.load("images/jetflame.png").convert_alpha()
 		self.thruster = []
+		 # Calculating how many pixels to cut each time from the sheet.
 		self.thruster_width = 1920//30
-		self.nr = 0
+		# Sprite number from the thruster list.
+		self.nr = 0 
 		# Cut from the spritesheet and add them to the thruster-list.
 		for i in range(30):
 			self.thruster.append(self.thrusterimage.subsurface((i*self.thruster_width, 0, self.thruster_width, self.thruster_width)))
@@ -34,6 +36,7 @@ class Player(pygame.sprite.Sprite):
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
 		if self.thrusting:
+			# Makes the ship accelerate instead of instant getting top speed
 			self.speed = min(7, self.speed+1)
 			self.thrusting = False
 
@@ -61,11 +64,13 @@ class Player(pygame.sprite.Sprite):
 
 	def turnLeft(self):
 		"""Turns the ship to the left"""
+		# How many degrees the ship turns left.
 		self.dir += 5
 		self.dir %= 360
 
 	def turnRight(self):
 		"""Turns the ship to the right"""
+		# How many degrees the ship turns right.
 		self.dir -= 5
 		self.dir %= 360
 
@@ -74,11 +79,12 @@ class Player(pygame.sprite.Sprite):
 		self.thrust()
 		self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
 		self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
+		# Makes the ship gradually loose speed when not thrusting.
 		self.speed = max(0, self.speed-0.2)
 
 	def rotate_sprite(sprite, degrees):
 		"""Rotating the image and rect"""
-		#get original center because new Rect center will change with image transformation
+		#get original center because new Rect center will change with image transformation.
 		oldCenter = sprite.rect.center
 		flamey_ship = pygame.Surface((200, 100))
 		ship_mask = flamey_ship.copy()

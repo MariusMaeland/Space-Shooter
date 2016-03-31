@@ -42,7 +42,7 @@ class Game():
 		self.explosion_list = []
 		self.esw = 1024//10 # Divide by ten because there are ten images per row on the sheet. ESW = explosion sheet witdh.
 		for i in range(8): # Because there are 8 rows of images on the sheet 
-			for j in  range(10):
+			for j in  range(10): # Ten images per row on the sprite sheet
 				self.explosion_list.append(self.explosion_image.subsurface(j*self.esw, i*self.esw, self.esw, self.esw))
 		print(len(self.explosion_list))
 
