@@ -61,12 +61,12 @@ class Player(pygame.sprite.Sprite):
 
 	def turnLeft(self):
 		"""Turns the ship to the left"""
-		self.dir += 1
+		self.dir += 5
 		self.dir %= 360
 
 	def turnRight(self):
 		"""Turns the ship to the right"""
-		self.dir -= 1
+		self.dir -= 5
 		self.dir %= 360
 
 	def update(self, screen, all_sprites_list):
@@ -81,15 +81,21 @@ class Player(pygame.sprite.Sprite):
 		#get original center because new Rect center will change with image transformation
 		oldCenter = sprite.rect.center
 		flamey_ship = pygame.Surface((200, 100))
-		pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
+		ship_mask = flamey_ship.copy()
+		#pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
 		if sprite.thrusting:
 			flamey_ship.blit(sprite.thruster[sprite.nr], (25, 20))
 		sprite.nr += 1
 		sprite.nr %= 30
 		flamey_ship.blit(sprite.origimage, (75,25))
+		ship_mask.blit(sprite.origimage, (75,25))
 		flamey_ship.set_colorkey((0,0,0))
+		ship_mask.set_colorkey((0,0,0))
 		#use pygame.transform.rotate(<image_to_rotate>, <turn_degrees>)
 		sprite.image = pygame.transform.rotate(flamey_ship, degrees)
+		sprite.mask = pygame.mask.from_surface(pygame.transform.rotate(ship_mask, degrees))
+		#outline = sprite.mask.outline()
+		#pygame.draw.lines(sprite.image, (255, 255, 0), 1, outline)
 		#get new Rect
 		sprite.rect = sprite.image.get_rect()
 		#set new center to original center

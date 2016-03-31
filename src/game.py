@@ -48,6 +48,24 @@ class Game():
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
 
+	def collisionchecks(self):
+		for bullet in self.player1_bullets:
+			if pygame.sprite.collide_mask(bullet, self.player2):
+				self.player2.kill()
+				# TODO: Animate explosion in killpos!
+				bullet.kill()
+				self.setup()
+		for bullet in self.player2_bullets:
+			if pygame.sprite.collide_mask(bullet, self.player1):
+				self.player1.kill()
+				# TODO: Animate explosion in killpos!
+				bullet.kill()
+				self.setup()
+		if pygame.sprite.collide_mask(self.player1, self.player2):
+				self.player1.kill()
+				self.player2.kill()
+				self.setup()
+
 	def eventhandler(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -88,6 +106,7 @@ class Game():
 					self.eventhandler()
 					self.all_sprites_list.update(self.screen, self.all_sprites_list)
 					self.all_sprites_list.draw(self.screen)
+					self.collisionchecks()
 					pygame.display.flip()
 					# Limit to 60 frames per second
 					self.clock.tick(FPS)
