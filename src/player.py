@@ -37,7 +37,7 @@ class Player(pygame.sprite.Sprite):
 			self.speed = min(7, self.speed+1)
 			self.thrusting = False
 
-	def fire(self, all_sprites_list):
+	def fire(self, all_sprites_list, bullet_list):
 		"""Fires a shot, takes in all_sprites_list to get access to the group
 		Firing is limited by the self.rate of fire(compulsory time in milliseconds
 		between each shot). """
@@ -54,6 +54,7 @@ class Player(pygame.sprite.Sprite):
 				bullet.yspeed = math.sin(math.radians(self.dir)) * -10
 	        	# Add the bullets to the lists
 				all_sprites_list.add(bullet)
+				bullet_list.add(bullet)
 				self.last_shot = pygame.time.get_ticks()
 				# Decrease the ammo count
 				self.ammo -= 1
@@ -93,6 +94,4 @@ class Player(pygame.sprite.Sprite):
 		sprite.rect = sprite.image.get_rect()
 		#set new center to original center
 		sprite.rect.center = oldCenter
-	
-	def draw(self, screen):
-		pass
+		
