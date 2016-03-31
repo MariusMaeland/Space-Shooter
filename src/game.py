@@ -45,7 +45,7 @@ class Game():
 
 		self.player1 = Player(50, SCREENHEIGHT//2, 0)
 		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180)
-		self.all_sprites_list.add(self.player)
+		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
 
 	def eventhandler(self):
