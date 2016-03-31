@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
 		# Various ammo-related stuff
 		self.ammo = 100000
 		self.last_shot = 0
-		self.rate_of_fire = 500
+		self.rate_of_fire = 100
 
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
@@ -60,12 +60,12 @@ class Player(pygame.sprite.Sprite):
 
 	def turnLeft(self):
 		"""Turns the ship to the left"""
-		self.dir += 5
+		self.dir += 1
 		self.dir %= 360
 
 	def turnRight(self):
 		"""Turns the ship to the right"""
-		self.dir -= 5
+		self.dir -= 1
 		self.dir %= 360
 
 	def update(self, screen):
