@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
 		""" Constructor. Creates a player. """
 		super().__init__()
 		# Set the starting image
-		self.origimage = pygame.transform.scale(pygame.image.load("images/ship1.png"), (50, 50))
+		self.origimage = pygame.transform.scale(pygame.image.load(random.choice(ship_image_list)), (50, 50))
 		self.image = self.origimage.copy()
 		self.rect = self.image.get_rect()
 		self.rect.center = (startx, starty)
