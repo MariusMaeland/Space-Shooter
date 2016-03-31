@@ -26,13 +26,13 @@ class Bullet(pygame.sprite.Sprite):
 		self.rect.centerx += self.xspeed
 		self.animate_bullet(screen)
 		if(self.rect.centerx > SCREENWIDTH):
-			all_sprites_list.kill(self)
+			self.kill()
 		if(self.rect.centerx < 0):
-			all_sprites_list.kill(self)
+			self.kill()
 		if(self.rect.centery > SCREENHEIGHT):
-			all_sprites_list.kill(self)
+			self.kill()
 		if(self.rect.centery < 0):
-			all_sprites_list.kill(self)
+			self.kill()
 
 	def draw(self, screen):
 		game.screen.blit(self.bullet[self.nr], (self.rect.centerx, self.rect.centery))
