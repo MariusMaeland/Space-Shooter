@@ -24,4 +24,4 @@ PINK       = ( 255,   0, 255)
 WARMPINK   = ( 255,   0, 128)
 GREY       = ( 160, 160, 160)
 
-ship = ["images/shship.png", "images/mship1.png", "images/yelship.png", "images/spco.png"]
+ship = ["images/ship1.png", "images/ship2.png", "images/ship3.png", "images/ship4.png"]
