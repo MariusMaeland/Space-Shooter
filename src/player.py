@@ -68,7 +68,7 @@ class Player(pygame.sprite.Sprite):
 		self.dir -= 1
 		self.dir %= 360
 
-	def update(self, screen):
+	def update(self, screen, all_sprites_list):
 		self.rotate_sprite(self.dir)
 		self.thrust()
 		self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed

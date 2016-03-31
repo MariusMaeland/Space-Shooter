@@ -1,5 +1,6 @@
 import pygame
 from functions import *
+from variables import *
 
 class Bullet(pygame.sprite.Sprite):
 	"""Constructor, creates a bullet fired by one of the two players."""
@@ -19,11 +20,20 @@ class Bullet(pygame.sprite.Sprite):
 		self.dir = 0
 		self.nr = 0
 
-	def update(self, screen):
+	def update(self, screen, all_sprites_list):
 		"""Moves the bullet in the direction the  player is facing"""
 		self.rect.centery += self.yspeed
 		self.rect.centerx += self.xspeed
 		self.rotate_bullet(self.dir, screen)
+		if(self.rect.centerx > SCREENWIDTH):
+			all_sprites_list.remove(self)
+		if(self.rect.centerx < 0):
+			all_sprites_list.remove(self)
+		if(self.rect.centery > SCREENHEIGHT):
+			all_sprites_list.remove(self)
+		if(self.rect.centery < 0):
+			all_sprites_list.remove(self)
+		print(all_sprites_list)
 
 	def draw(self, screen):
 		game.screen.blit(self.bullet[self.nr], (self.rect.centerx, self.rect.centery))
@@ -40,7 +50,7 @@ class Bullet(pygame.sprite.Sprite):
 		#shot.set_colorkey((0,0,0))
 		#use pygame.transform.rotate(<image_to_rotate>, <turn_degrees>)
 		sprite.image = pygame.transform.rotate(sprite.bullet[sprite.nr], degrees)
-		sprite.nr += 1
+		sprite.nr += 1 
 		sprite.nr %= 15
 		#get new Rect
 		sprite.rect = sprite.image.get_rect()
