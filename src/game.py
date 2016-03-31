@@ -6,7 +6,6 @@ from variables import *
 from bullet import Bullet
 from player import Player
 
-
 class Game():
 	"""Initializes the game and handles user input, loading, pausing etc..."""
 	def __init__(self):
@@ -35,14 +34,19 @@ class Game():
 				self.joystick_name = self.joystick.get_name()
 				print(self.joystick_name)
 		
+		#-----------------------------------------------------------------------
+		#                    SETTING UP SPRITEGROUPS
+		#-----------------------------------------------------------------------
 		self.all_sprites_list = pygame.sprite.Group()
-		self.player = Player(50, SCREENHEIGHT//2, 0)
-		self.all_sprites_list.add(self.player)
-		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180)
-		self.all_sprites_list.add(self.player2)
-		print (self.all_sprites_list)
+		self.player1_bullets = pygame.sprite.Group()
+		self.player2_bullets = pygame.sprite.Group()
+		self.fuel_list = pygame.sprite.Group()
+		self.asteroid_list = pygame.sprite.Group()
 
-	
+		self.player1 = Player(50, SCREENHEIGHT//2, 0)
+		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180)
+		self.all_sprites_list.add(self.player)
+		self.all_sprites_list.add(self.player2)
 
 	def eventhandler(self):
 		for event in pygame.event.get():
@@ -56,13 +60,13 @@ class Game():
 		if self.pressed[pygame.K_ESCAPE]:
 			exit()
 		if self.pressed[pygame.K_RIGHT]:
-			self.player.turnRight()
+			self.player1.turnRight()
 		if self.pressed[pygame.K_LEFT]:
-			self.player.turnLeft()
+			self.player1.turnLeft()
 		if self.pressed[pygame.K_UP]:
-			self.player.thrusting = True
+			self.player1.thrusting = True
 		if self.pressed[pygame.K_KP0]:
-			self.player.fire(self.all_sprites_list)
+			self.player1.fire(self.all_sprites_list, self.player1_bullets)
 
 		if self.pressed[pygame.K_d]:
 			self.player2.turnRight()
@@ -71,10 +75,7 @@ class Game():
 		if self.pressed[pygame.K_w]:
 			self.player2.thrusting = True
 		if self.pressed[pygame.K_q]:
-			self.player2.fire(self.all_sprites_list)
-		
-
-
+			self.player2.fire(self.all_sprites_list, self.player2_bullets)
 
 	def run(self):
 			"""Runs an instance of itself..."""
