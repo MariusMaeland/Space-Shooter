@@ -5,6 +5,7 @@ import math
 from variables import *
 from bullet import Bullet
 from player import Player
+from explosion import Explosion
 
 class Game():
 	"""Initializes the game and handles user input, loading, pausing etc..."""
@@ -35,6 +36,17 @@ class Game():
 				print(self.joystick_name)
 		
 		#-----------------------------------------------------------------------
+		#                    SETTING UP EXPLOSION-SHEET
+		#-----------------------------------------------------------------------
+		self.explosion_image = pygame.image.load("images/explosion.png").convert_alpha()
+		self.explosion_list = []
+		self.esw = 1024//10 # Divide by ten because there are ten images per row on the sheet. ESW = explosion sheet witdh.
+		for i in range(8): # Because there are 8 rows of images on the sheet 
+			for j in  range(10):
+				self.explosion_list.append(self.explosion_image.subsurface(j*self.esw, i*self.esw, self.esw, self.esw))
+		print(len(self.explosion_list))
+
+		#-----------------------------------------------------------------------
 		#                    SETTING UP SPRITEGROUPS
 		#-----------------------------------------------------------------------
 		self.all_sprites_list = pygame.sprite.Group()
@@ -47,10 +59,14 @@ class Game():
 		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180)
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
+		self.death = Explosion(self.explosion_list, 600, 350, 200, 200)
+		self.all_sprites_list.add(self.death)
 
 	def collisionchecks(self):
 		for bullet in self.player1_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player2):
+				self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery)
+				self.all_sprites_list.add(self.death)
 				self.player2.kill()
 				# TODO: Animate explosion in killpos!
 				bullet.kill()

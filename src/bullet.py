@@ -1,5 +1,4 @@
 import pygame
-from functions import *
 from variables import *
 
 class Bullet(pygame.sprite.Sprite):
