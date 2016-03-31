@@ -36,9 +36,9 @@ class Game():
 				print(self.joystick_name)
 		
 		self.all_sprites_list = pygame.sprite.Group()
-		self.player = Player(50, SCREENHEIGHT//2)
+		self.player = Player(50, SCREENHEIGHT//2, 0)
 		self.all_sprites_list.add(self.player)
-		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2)
+		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180)
 		self.all_sprites_list.add(self.player2)
 		print (self.all_sprites_list)
 

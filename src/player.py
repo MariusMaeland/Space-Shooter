@@ -5,7 +5,7 @@ from variables import *
 
 class Player(pygame.sprite.Sprite):
 
-	def __init__(self, startx, starty):
+	def __init__(self, startx, starty, start_angle):
 		""" Constructor. Creates a player. """
 		super().__init__()
 		# Set the starting image
@@ -22,7 +22,7 @@ class Player(pygame.sprite.Sprite):
 		for i in range(30):
 			self.thruster.append(self.thrusterimage.subsurface((i*self.thruster_width, 0, self.thruster_width, self.thruster_width)))
 		# Various attributes
-		self.dir = 0
+		self.dir = start_angle
 		self.speed = 0
 		self.thrusting = False
 		# Various ammo-related stuff
