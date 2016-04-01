@@ -55,8 +55,8 @@ class Game():
 		self.fuel_list = pygame.sprite.Group()
 		self.asteroid_list = pygame.sprite.Group()
 
-		self.player1 = Player(50, SCREENHEIGHT//2, 0)
-		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180)
+		self.player1 = Player(50, SCREENHEIGHT//2, 0) #P1STARTPOS and STARTANGLE???
+		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180) #P2STARTPOS and STARTANGLE???
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
 		self.death = Explosion(self.explosion_list, 600, 350, 200, 200)
@@ -110,6 +110,19 @@ class Game():
 			self.player2.thrusting = True
 		if self.pressed[pygame.K_q]:
 			self.player2.fire(self.all_sprites_list, self.player2_bullets)
+
+	def font_panel(self):
+		"""Setting up font and blit it on the screen"""
+
+		self.font = pygame.font.SysFont('FreeMonoBold.ttf', 20, True, False)
+
+		p1_ammo = self.font.render('Player1 ammo: %d' % Player1.ammo, True, WHITE)
+
+		p2_ammo = self.font.render('Player2 ammo: %d' % Player2.ammo, True, WHITE)
+
+		self.screen.blit(p1_ammo, [10, 10])
+		self.screen.blit(p2.ammo, [SCREEN] - 100, 10)
+
 
 	def run(self):
 			"""Runs an instance of itself..."""
