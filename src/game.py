@@ -21,6 +21,8 @@ class Game():
 		# ----------- VARIOUS LOADING --------------------
 		self.clock = pygame.time.Clock()
 		self.background = pygame.image.load("images/space.png")
+		# Loading font
+		self.font = pygame.font.SysFont('fonts/Roboto-Black.ttf', 20, False, False)
 
 	def setup(self):
 		# -------------------- 360 Controller Works --------------------------
@@ -38,12 +40,14 @@ class Game():
 		#-----------------------------------------------------------------------
 		#                    SETTING UP EXPLOSION-SHEET
 		#-----------------------------------------------------------------------
-		self.explosion_image = pygame.image.load("images/explosion.png").convert_alpha()
+		self.explosion_image = pygame.image.load("images/exp2.png").convert_alpha()
 		self.explosion_list = []
-		self.esw = 1024//10 # Divide by ten because there are ten images per row on the sheet. ESW = explosion sheet witdh.
-		for i in range(8): # Because there are 8 rows of images on the sheet 
-			for j in  range(10): # Ten images per row on the sprite sheet
-				self.explosion_list.append(self.explosion_image.subsurface(j*self.esw, i*self.esw, self.esw, self.esw))
+		self.esw = 900//9 # Divide by eight because there are eight images per row on the sheet. ESW = explosion sheet witdh.
+		for i in range(9): # Because there are 8 rows of images on the sheet 
+			for j in range(9):
+				for n in range(2):
+					self.explosion_list.append(self.explosion_image.subsurface(j*self.esw, i*self.esw, self.esw, self.esw))
+
 		print(len(self.explosion_list))
 
 		#-----------------------------------------------------------------------
@@ -59,7 +63,7 @@ class Game():
 		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180) #P2STARTPOS and STARTANGLE???
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
-		self.death = Explosion(self.explosion_list, 600, 350, 200, 200)
+		self.death = Explosion(self.explosion_list, 600, 350, 300, 300)
 		self.all_sprites_list.add(self.death)
 
 	def collisionchecks(self):
@@ -73,10 +77,10 @@ class Game():
 				self.setup()
 		for bullet in self.player2_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player1):
-				self.player1.kill()
+				self.player1.hp -= 10
 				# TODO: Animate explosion in killpos!
 				bullet.kill()
-				self.setup()
+				#self.setup()
 		if pygame.sprite.collide_mask(self.player1, self.player2):
 				self.player1.kill()
 				self.player2.kill()
@@ -94,35 +98,37 @@ class Game():
 		if self.pressed[pygame.K_ESCAPE]:
 			exit()
 		if self.pressed[pygame.K_RIGHT]:
-			self.player1.turnRight()
-		if self.pressed[pygame.K_LEFT]:
-			self.player1.turnLeft()
-		if self.pressed[pygame.K_UP]:
-			self.player1.thrusting = True
-		if self.pressed[pygame.K_KP0]:
-			self.player1.fire(self.all_sprites_list, self.player1_bullets)
-
-		if self.pressed[pygame.K_d]:
 			self.player2.turnRight()
-		if self.pressed[pygame.K_a]:
+		if self.pressed[pygame.K_LEFT]:
 			self.player2.turnLeft()
-		if self.pressed[pygame.K_w]:
+		if self.pressed[pygame.K_UP]:
 			self.player2.thrusting = True
-		if self.pressed[pygame.K_q]:
+		if self.pressed[pygame.K_KP0]:
 			self.player2.fire(self.all_sprites_list, self.player2_bullets)
 
-	def font_panel(self):
-		"""Setting up font and blit it on the screen"""
+		if self.pressed[pygame.K_d]:
+			self.player1.turnRight()
+		if self.pressed[pygame.K_a]:
+			self.player1.turnLeft()
+		if self.pressed[pygame.K_w]:
+			self.player1.thrusting = True
+		if self.pressed[pygame.K_q]:
+			self.player1.fire(self.all_sprites_list, self.player1_bullets)
 
-		self.font = pygame.font.SysFont('FreeMonoBold.ttf', 20, True, False)
+	def player_info(self):
+		"""Setting up player information and blitting it on the screen"""
 
-		p1_ammo = self.font.render('Player1 ammo: %d' % Player1.ammo, True, WHITE)
-
-		p2_ammo = self.font.render('Player2 ammo: %d' % Player2.ammo, True, WHITE)
+		p1_ammo = self.font.render('Ammo: %d' % self.player1.ammo, True, WHITE)
+		p2_ammo = self.font.render('Ammo: %d' % self.player2.ammo, True, WHITE)
 
 		self.screen.blit(p1_ammo, [10, 10])
-		self.screen.blit(p2.ammo, [SCREEN] - 100, 10)
-
+		self.screen.blit(p2_ammo, [SCREENWIDTH - 105, 10])
+		#Player 1 hp-bar:
+		pygame.draw.rect(self.screen, WHITE, (10, (SCREENHEIGHT-30), 202, 12), 1)
+		pygame.draw.rect(self.screen, RED, (11, (SCREENHEIGHT-29), (self.player1.hp * 2), 10))
+		#Player 2 hp-bar
+		pygame.draw.rect(self.screen, WHITE, ((SCREENWIDTH-222), (SCREENHEIGHT-30), 202, 12), 1)
+		pygame.draw.rect(self.screen, RED, ((SCREENWIDTH-221), (SCREENHEIGHT-29), (self.player2.hp * 2), 10))
 
 	def run(self):
 			"""Runs an instance of itself..."""
@@ -135,6 +141,7 @@ class Game():
 					self.eventhandler()
 					self.all_sprites_list.update(self.screen, self.all_sprites_list)
 					self.all_sprites_list.draw(self.screen)
+					self.player_info()
 					self.collisionchecks()
 					pygame.display.flip()
 					# Limit to 60 frames per second

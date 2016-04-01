@@ -1,7 +1,7 @@
 SCREENWIDTH = 1200 # Width of the window
 SCREENHEIGHT = 700 # Height of the window
 CAPTION = 'Space'
-FPS = 120
+FPS = 60
 GAME_STATE = True
 GAME_PAUSE = False
 
