@@ -63,13 +63,14 @@ class Game():
 		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180) #P2STARTPOS and STARTANGLE???
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
-		self.death = Explosion(self.explosion_list, 600, 350, 300, 300)
-		self.all_sprites_list.add(self.death)
+		
+		#self.death = Explosion(self.explosion_list, 600, 350, 500, 500)
+		#self.all_sprites_list.add(self.death)
 
 	def collisionchecks(self):
 		for bullet in self.player1_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player2):
-				self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery)
+				self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 200, 200)
 				self.all_sprites_list.add(self.death)
 				self.player2.kill()
 				# TODO: Animate explosion in killpos!
@@ -129,12 +130,13 @@ class Game():
 		#Player 2 hp-bar
 		pygame.draw.rect(self.screen, WHITE, ((SCREENWIDTH-222), (SCREENHEIGHT-30), 202, 12), 1)
 		pygame.draw.rect(self.screen, RED, ((SCREENWIDTH-221), (SCREENHEIGHT-29), (self.player2.hp * 2), 10))
-
+		
 	def run(self):
 			"""Runs an instance of itself..."""
 			self.setup()
 			while True:
 				while GAME_STATE:
+					#print("andre var her")
 					# Set background to space image
 					self.screen.blit(self.background, (0, 0))
 					# Handling events
@@ -143,6 +145,7 @@ class Game():
 					self.all_sprites_list.draw(self.screen)
 					self.player_info()
 					self.collisionchecks()
+					print(self.all_sprites_list)
 					pygame.display.flip()
 					# Limit to 60 frames per second
 					self.clock.tick(FPS)

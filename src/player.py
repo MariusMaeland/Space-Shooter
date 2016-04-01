@@ -29,10 +29,11 @@ class Player(pygame.sprite.Sprite):
 		self.speed = 0
 		self.thrusting = False
 		# Various ammo-related stuff
-		self.ammo = 100000
+		self.ammo = 100
 		self.last_shot = 0
 		self.rate_of_fire = 100
 		# Health-problems
+		self.dead = False
 		self.hp = 100
 
 	def thrust(self):
@@ -77,12 +78,16 @@ class Player(pygame.sprite.Sprite):
 		self.dir %= 360
 
 	def update(self, screen, all_sprites_list):
-		self.rotate_sprite(self.dir)
-		self.thrust()
-		self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
-		self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
-		# Makes the ship gradually loose speed when not thrusting.
-		self.speed = max(0, self.speed-0.2)
+		if self.dead:
+			# TODO: Add counter untill respawn.
+			pass
+		else:
+			self.rotate_sprite(self.dir)
+			self.thrust()
+			self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
+			self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
+			# Makes the ship gradually loose speed when not thrusting.
+			self.speed = max(0, self.speed-0.2)
 
 	def rotate_sprite(sprite, degrees):
 		"""Rotating the image and rect"""
