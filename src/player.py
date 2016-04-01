@@ -29,9 +29,12 @@ class Player(pygame.sprite.Sprite):
 		self.speed = 0
 		self.thrusting = False
 		# Various ammo-related stuff
-		self.ammo = 100000
+		self.ammo = 100
 		self.last_shot = 0
 		self.rate_of_fire = 100
+		# Health-problems
+		self.dead = False
+		self.hp = 100
 
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
@@ -44,23 +47,25 @@ class Player(pygame.sprite.Sprite):
 		"""Fires a shot, takes in all_sprites_list to get access to the group
 		Firing is limited by the self.rate of fire(compulsory time in milliseconds
 		between each shot). """
-		
-		# Restrain the rate of fire
-		if (pygame.time.get_ticks()-self.last_shot) > (self.rate_of_fire):
-			if self.ammo:
-				bullet = Bullet()
-				#game.lasersound.play()
-				bullet.rect.centerx = self.rect.centerx
-				bullet.rect.centery = self.rect.centery
-				# Calculate vectors:
-				bullet.xspeed = math.cos(math.radians(self.dir)) * 10
-				bullet.yspeed = math.sin(math.radians(self.dir)) * -10
-	        	# Add the bullets to the lists
-				all_sprites_list.add(bullet)
-				bullet_list.add(bullet)
-				self.last_shot = pygame.time.get_ticks()
-				# Decrease the ammo count
-				self.ammo -= 1
+		if self.dead:
+			pass
+		else:
+			# Restrain the rate of fire
+			if (pygame.time.get_ticks()-self.last_shot) > (self.rate_of_fire):
+				if self.ammo:
+					bullet = Bullet()
+					#game.lasersound.play()
+					bullet.rect.centerx = self.rect.centerx
+					bullet.rect.centery = self.rect.centery
+					# Calculate vectors:
+					bullet.xspeed = math.cos(math.radians(self.dir)) * 10
+					bullet.yspeed = math.sin(math.radians(self.dir)) * -10
+		        	# Add the bullets to the lists
+					all_sprites_list.add(bullet)
+					bullet_list.add(bullet)
+					self.last_shot = pygame.time.get_ticks()
+					# Decrease the ammo count
+					self.ammo -= 1
 
 	def turnLeft(self):
 		"""Turns the ship to the left"""
@@ -75,12 +80,16 @@ class Player(pygame.sprite.Sprite):
 		self.dir %= 360
 
 	def update(self, screen, all_sprites_list):
-		self.rotate_sprite(self.dir)
-		self.thrust()
-		self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
-		self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
-		# Makes the ship gradually loose speed when not thrusting.
-		self.speed = max(0, self.speed-0.2)
+		if self.dead:
+			# TODO: Add counter untill respawn.
+			pass
+		else:
+			self.rotate_sprite(self.dir)
+			self.thrust()
+			self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
+			self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
+			# Makes the ship gradually loose speed when not thrusting.
+			self.speed = max(0, self.speed-0.2)
 
 	def rotate_sprite(sprite, degrees):
 		"""Rotating the image and rect"""

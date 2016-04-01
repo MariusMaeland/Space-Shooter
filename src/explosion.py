@@ -9,18 +9,15 @@ class Explosion(pygame.sprite.Sprite):
 		self.explist = explosionlist
 		self.image = self.explist[0]
 		self.rect = self.image.get_rect()
-		self.rect.centerx = x
-		self.rect.centery = y
 		self.width = width
 		self.height = height
+		self.rect.x = x - (self.width//2)
+		self.rect.y = y - (self.height//2)
 		self.nr = 0
 
 	def update(self, screen, list):
 		if self.nr < len(self.explist):
 			self.image = pygame.transform.scale(self.explist[self.nr], (self.width, self.height))
-			print(self.rect.centerx)
-			print(self.rect.centery)
-			#screen.blit(self.image, (self.rect.centerx, self.rect.centery))
 			self.nr += 1
 		else:
 			self.kill()
