@@ -47,23 +47,25 @@ class Player(pygame.sprite.Sprite):
 		"""Fires a shot, takes in all_sprites_list to get access to the group
 		Firing is limited by the self.rate of fire(compulsory time in milliseconds
 		between each shot). """
-		
-		# Restrain the rate of fire
-		if (pygame.time.get_ticks()-self.last_shot) > (self.rate_of_fire):
-			if self.ammo:
-				bullet = Bullet()
-				#game.lasersound.play()
-				bullet.rect.centerx = self.rect.centerx
-				bullet.rect.centery = self.rect.centery
-				# Calculate vectors:
-				bullet.xspeed = math.cos(math.radians(self.dir)) * 10
-				bullet.yspeed = math.sin(math.radians(self.dir)) * -10
-	        	# Add the bullets to the lists
-				all_sprites_list.add(bullet)
-				bullet_list.add(bullet)
-				self.last_shot = pygame.time.get_ticks()
-				# Decrease the ammo count
-				self.ammo -= 1
+		if self.dead:
+			pass
+		else:
+			# Restrain the rate of fire
+			if (pygame.time.get_ticks()-self.last_shot) > (self.rate_of_fire):
+				if self.ammo:
+					bullet = Bullet()
+					#game.lasersound.play()
+					bullet.rect.centerx = self.rect.centerx
+					bullet.rect.centery = self.rect.centery
+					# Calculate vectors:
+					bullet.xspeed = math.cos(math.radians(self.dir)) * 10
+					bullet.yspeed = math.sin(math.radians(self.dir)) * -10
+		        	# Add the bullets to the lists
+					all_sprites_list.add(bullet)
+					bullet_list.add(bullet)
+					self.last_shot = pygame.time.get_ticks()
+					# Decrease the ammo count
+					self.ammo -= 1
 
 	def turnLeft(self):
 		"""Turns the ship to the left"""

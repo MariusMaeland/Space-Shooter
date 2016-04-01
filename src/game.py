@@ -75,7 +75,6 @@ class Game():
 				self.player2.kill()
 				# TODO: Animate explosion in killpos!
 				bullet.kill()
-				self.setup()
 		for bullet in self.player2_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player1):
 				self.player1.hp -= 10
