@@ -70,7 +70,7 @@ class Game():
 	def collisionchecks(self):
 		for bullet in self.player1_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player2):
-				self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 200, 200)
+				self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 600, 600)
 				self.all_sprites_list.add(self.death)
 				self.player2.kill()
 				# TODO: Animate explosion in killpos!
