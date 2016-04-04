@@ -57,9 +57,10 @@ class Game():
 		self.asteroid_image = pygame.image.load("images/asteroids.png").convert_alpha()
 		self.asteroid_list = []
 		self.asw = 1024//8 # Divide by eight because there are eight images per row on the sheet. ESW = explosion sheet witdh.
-		for i in range(8): # Because there are 8 rows of images on the sheet 
+		for i in range(4): # Because there are 8 rows of images on the sheet 
 			for j in range(8):
-				self.asteroid_list.append(self.asteroid_image.subsurface(j*self.asw, i*self.asw, self.asw, self.asw))
+				for n in range(3):
+					self.asteroid_list.append(self.asteroid_image.subsurface(j*self.asw, i*self.asw, self.asw, self.asw))
 
 		print(len(self.asteroid_list))
 
@@ -77,7 +78,8 @@ class Game():
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
 
-		self.asteroid = Asteroid(self.asteroid_list, 600, 350)
+	
+		self.asteroid = Asteroid(self.asteroid_list)
 		self.all_sprites_list.add(self.asteroid)
 		
 		#self.death = Explosion(self.explosion_list, 600, 350, 500, 500)
@@ -98,6 +100,8 @@ class Game():
 						self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 200, 200)
 						self.all_sprites_list.add(self.death)
 						self.player2.squish(P2DEADPOS)
+						self.player1.kills += 1
+						self.player2.fuel = 100
 				bullet.kill()
 		#-----------------------------------------------------------------------
 		#                    Player 1 gets hit or killed!
@@ -113,6 +117,8 @@ class Game():
 						self.death = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 200, 200)
 						self.all_sprites_list.add(self.death)
 						self.player1.squish(P1DEADPOS)
+						self.player2.kills += 1
+						self.player1.fuel = 100
 					
 				bullet.kill()
 		#-----------------------------------------------------------------------
@@ -130,8 +136,29 @@ class Game():
 				self.all_sprites_list.add(self.supadeath)
 				self.player1.squish(P1DEADPOS)
 				self.player2.squish(P2DEADPOS)
+				self.player1.fuel = 100
+				self.player2.fuel = 100
+				
+				self.player1.kills -= 1
+				self.player2.kills -= 1
 				#self.setup()
 
+		if pygame.sprite.collide_mask(self.player1, self.asteroid):
+			self.player1.hp = 0 
+			self.player1.dead = True 
+			self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
+			self.all_sprites_list.add(self.supadeath)
+			self.player1.squish(P1DEADPOS)
+			self.player1.fuel = 100
+
+		if pygame.sprite.collide_mask(self.player2, self.asteroid):
+			self.player2.hp = 0
+			self.player2.dead = True
+			self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
+			self.all_sprites_list.add(self.supadeath)
+			self.player2.squish(P2DEADPOS)
+			self.player2.fuel = 100
+	
 	def eventhandler(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -148,7 +175,8 @@ class Game():
 		if self.pressed[pygame.K_LEFT]:
 			self.player2.turnLeft()
 		if self.pressed[pygame.K_UP]:
-			self.player2.thrusting = True
+			if self.player2.fuel > 0:
+				self.player2.thrusting = True
 		if self.pressed[pygame.K_KP0]:
 			self.player2.fire(self.all_sprites_list, self.player2_bullets)
 
@@ -157,7 +185,8 @@ class Game():
 		if self.pressed[pygame.K_a]:
 			self.player1.turnLeft()
 		if self.pressed[pygame.K_w]:
-			self.player1.thrusting = True
+			if self.player1.fuel > 0:
+				self.player1.thrusting = True
 		if self.pressed[pygame.K_q]:
 			self.player1.fire(self.all_sprites_list, self.player1_bullets)
 
@@ -167,15 +196,28 @@ class Game():
 		p1_ammo = self.font.render('Ammo: %d' % self.player1.ammo, True, WHITE)
 		p2_ammo = self.font.render('Ammo: %d' % self.player2.ammo, True, WHITE)
 
-		self.screen.blit(p1_ammo, [10, 10])
-		self.screen.blit(p2_ammo, [SCREENWIDTH - 105, 10])
+		p1_stats = self.font.render('kills: %d' % self.player1.kills, True, WHITE)
+		p2_stats = self.font.render('kills: %d' % self.player2.kills, True, WHITE)
+
+		#player 1 stats and ammo info
+		self.screen.blit(p1_stats, [10, 10])
+		self.screen.blit(p1_ammo, [10, 30])
+		#player 2 stats and ammo info
+		self.screen.blit(p2_stats, [SCREENWIDTH - 105, 10])
+		self.screen.blit(p2_ammo, [SCREENWIDTH - 105, 30])
 		#Player 1 hp-bar:
 		pygame.draw.rect(self.screen, WHITE, (10, (SCREENHEIGHT-30), 202, 12), 1)
 		pygame.draw.rect(self.screen, RED, (11, (SCREENHEIGHT-29), (self.player1.hp * 2), 10))
 		#Player 2 hp-bar
 		pygame.draw.rect(self.screen, WHITE, ((SCREENWIDTH-222), (SCREENHEIGHT-30), 202, 12), 1)
 		pygame.draw.rect(self.screen, RED, ((SCREENWIDTH-221), (SCREENHEIGHT-29), (self.player2.hp * 2), 10))
-		
+		#player 1 fuel bar
+		pygame.draw.rect(self.screen, WHITE, (10, (SCREENHEIGHT-50), 202, 12), 1)
+		pygame.draw.rect(self.screen, GREEN, (11, (SCREENHEIGHT-49), (self.player1.fuel * 2), 10))
+		#player 2 fuel bar
+		pygame.draw.rect(self.screen, WHITE, ((SCREENWIDTH-222), (SCREENHEIGHT-50), 202, 12), 1)
+		pygame.draw.rect(self.screen, GREEN, ((SCREENWIDTH-221), (SCREENHEIGHT-49), (self.player2.fuel * 2), 10))
+
 	def run(self):
 			"""Runs an instance of itself..."""
 			self.setup()
