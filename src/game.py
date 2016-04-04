@@ -154,7 +154,7 @@ class Game():
 		if pygame.sprite.collide_mask(self.player2, self.asteroid):
 			self.player2.hp = 0
 			self.player2.dead = True
-			self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player1.rect.centery, 400, 400)
+			self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
 			self.all_sprites_list.add(self.supadeath)
 			self.player2.squish(P2DEADPOS)
 			self.player2.fuel = 100
