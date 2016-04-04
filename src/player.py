@@ -85,13 +85,13 @@ class Player(pygame.sprite.Sprite):
 	def turnLeft(self):
 		"""Turns the ship to the left"""
 		# How many degrees the ship turns left.
-		self.dir += 5
+		self.dir += 4
 		self.dir %= 360
 
 	def turnRight(self):
 		"""Turns the ship to the right"""
 		# How many degrees the ship turns right.
-		self.dir -= 5
+		self.dir -= 4
 		self.dir %= 360
 
 	def update(self, screen, all_sprites_list):
