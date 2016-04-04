@@ -50,12 +50,9 @@ class Player(pygame.sprite.Sprite):
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
 		if self.thrusting:
-			if self.fuel == 0:
-				self.thrusting = False
-
 			if self.fuel > 0:
 				# Makes the ship accelerate instead of instant getting top speed
-				self.fuel -= 0.2
+				self.fuel -= 0.1
 				self.speed = min(7, self.speed+1)
 
 			self.thrusting = False
