@@ -100,6 +100,7 @@ class Game():
 						self.all_sprites_list.add(self.death)
 						self.player2.squish(P2DEADPOS)
 						self.player1.kills += 1
+						self.player2.fuel = 100
 				bullet.kill()
 		#-----------------------------------------------------------------------
 		#                    Player 1 gets hit or killed!
@@ -116,6 +117,7 @@ class Game():
 						self.all_sprites_list.add(self.death)
 						self.player1.squish(P1DEADPOS)
 						self.player2.kills += 1
+						self.player1.fuel = 100
 					
 				bullet.kill()
 		#-----------------------------------------------------------------------
@@ -133,6 +135,8 @@ class Game():
 				self.all_sprites_list.add(self.supadeath)
 				self.player1.squish(P1DEADPOS)
 				self.player2.squish(P2DEADPOS)
+				self.player1.fuel = 100
+				self.player2.fuel = 100
 				
 				self.player1.kills -= 1
 				self.player2.kills -= 1
