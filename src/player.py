@@ -129,4 +129,3 @@ class Player(pygame.sprite.Sprite):
 		sprite.rect = sprite.image.get_rect()
 		#set new center to original center
 		sprite.rect.center = oldCenter
-		
