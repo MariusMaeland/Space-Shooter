@@ -68,26 +68,54 @@ class Game():
 		#self.all_sprites_list.add(self.death)
 
 	def collisionchecks(self):
+		#-----------------------------------------------------------------------
+		#                    Player 2 gets hit or killed!
+		#-----------------------------------------------------------------------
 		for bullet in self.player1_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player2):
-				self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 600, 600)
-				self.all_sprites_list.add(self.death)
-				self.player2.kill()
-				# TODO: Animate explosion in killpos!
+				if self.player2.hp > 0:
+					self.player2.hp -= 10
+					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
+					self.all_sprites_list.add(self.hitpointexp)
+					if self.player2.hp == 0:
+						self.player2.dead = True
+						self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 200, 200)
+						self.all_sprites_list.add(self.death)
+						self.player2.squish(P2DEADPOS)
 				bullet.kill()
+		#-----------------------------------------------------------------------
+		#                    Player 1 gets hit or killed!
+		#-----------------------------------------------------------------------
 		for bullet in self.player2_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player1):
-				self.player1.hp -= 10
-			if self.player1.hp == 0:
-				self.death = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 200, 200)
-				self.all_sprites_list.add(self.death)
-				# TODO: Animate explosion in killpos!
+				if self.player1.hp > 0:
+					self.player1.hp -= 10
+					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
+					self.all_sprites_list.add(self.hitpointexp)
+					if self.player1.hp == 0:
+						self.player1.dead = True
+						self.death = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 200, 200)
+						self.all_sprites_list.add(self.death)
+						self.player1.squish(P1DEADPOS)
+					
 				bullet.kill()
-				#self.setup()
+		#-----------------------------------------------------------------------
+		#                    If the player collides!
+		#-----------------------------------------------------------------------	
 		if pygame.sprite.collide_mask(self.player1, self.player2):
+			if (self.player1.dead or self.player2.dead):
+				pass
+			else:
+				self.player1.hp = 0 
+				self.player2.hp = 0
+				self.player1.dead = True 
+				self.player2.dead = True
+				self.p1death = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 200, 200)
+				self.p2death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 200, 200)
+				self.all_sprites_list.add(self.p1death, self.p2death)
 				self.player1.kill()
 				self.player2.kill()
-				self.setup()
+				#self.setup()
 
 	def eventhandler(self):
 		for event in pygame.event.get():

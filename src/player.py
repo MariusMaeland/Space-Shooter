@@ -36,6 +36,9 @@ class Player(pygame.sprite.Sprite):
 		self.dead = False
 		self.hp = 100
 
+	def squish(self, deadpos):
+		self.rect.center = deadpos
+
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
 		if self.thrusting:
