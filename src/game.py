@@ -5,6 +5,7 @@ import math
 from variables import *
 from bullet import Bullet
 from player import Player
+from asteroid import Asteroid
 from explosion import Explosion
 
 class Game():
@@ -51,18 +52,33 @@ class Game():
 		print(len(self.explosion_list))
 
 		#-----------------------------------------------------------------------
+		#                    SETTING UP ASTEROID-SHEET
+		#-----------------------------------------------------------------------
+		self.asteroid_image = pygame.image.load("images/asteroids.png").convert_alpha()
+		self.asteroid_list = []
+		self.asw = 1024//8 # Divide by eight because there are eight images per row on the sheet. ESW = explosion sheet witdh.
+		for i in range(8): # Because there are 8 rows of images on the sheet 
+			for j in range(8):
+				self.asteroid_list.append(self.asteroid_image.subsurface(j*self.asw, i*self.asw, self.asw, self.asw))
+
+		print(len(self.asteroid_list))
+
+		#-----------------------------------------------------------------------
 		#                    SETTING UP SPRITEGROUPS
 		#-----------------------------------------------------------------------
 		self.all_sprites_list = pygame.sprite.Group()
 		self.player1_bullets = pygame.sprite.Group()
 		self.player2_bullets = pygame.sprite.Group()
 		self.fuel_list = pygame.sprite.Group()
-		self.asteroid_list = pygame.sprite.Group()
+		#self.asteroid_list = pygame.sprite.Group()
 
 		self.player1 = Player(P1STARTPOS, P1STARTANGLE)
 		self.player2 = Player(P2STARTPOS, P2STARTANGLE)
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
+
+		self.asteroid = Asteroid(self.asteroid_list, 600, 350)
+		self.all_sprites_list.add(self.asteroid)
 		
 		#self.death = Explosion(self.explosion_list, 600, 350, 500, 500)
 		#self.all_sprites_list.add(self.death)
