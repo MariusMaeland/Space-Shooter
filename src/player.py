@@ -6,14 +6,16 @@ from variables import *
 
 class Player(pygame.sprite.Sprite):
 
-	def __init__(self, startx, starty, start_angle):
+	def __init__(self, startpos, start_angle):
 		""" Constructor. Creates a player. """
 		super().__init__()
 		# Set the starting image
 		self.origimage = pygame.transform.scale(pygame.image.load(random.choice(ship_image_list)), (50, 50))
 		self.image = self.origimage.copy()
+		self.startx = startpos[0]
+		self.starty = startpos[1]
 		self.rect = self.image.get_rect()
-		self.rect.center = (startx, starty)
+		self.rect.center = (self.startx, self.starty)
 		# Load the image for the thruster-flame
 		self.thrusterimage = pygame.image.load("images/jetflame.png").convert_alpha()
 		self.thruster = []
@@ -25,16 +27,19 @@ class Player(pygame.sprite.Sprite):
 		for i in range(30):
 			self.thruster.append(self.thrusterimage.subsurface((i*self.thruster_width, 0, self.thruster_width, self.thruster_width)))
 		# Various attributes
+		self.startdir = start_angle
 		self.dir = start_angle
 		self.speed = 0
 		self.thrusting = False
 		# Various ammo-related stuff
 		self.ammo = 100
+	
 		self.last_shot = 0
 		self.rate_of_fire = 100
 		# Health-problems
 		self.dead = False
 		self.hp = 100
+		self.respawn_tick = 0
 
 	def squish(self, deadpos):
 		self.rect.center = deadpos
@@ -84,8 +89,14 @@ class Player(pygame.sprite.Sprite):
 
 	def update(self, screen, all_sprites_list):
 		if self.dead:
-			# TODO: Add counter untill respawn.
-			pass
+			self.respawn_tick += 1
+			if self.respawn_tick > (FPS * 3):
+				self.respawn_tick = 0
+				self.dead = False
+				self.rect.center = (self.startx, self.starty)
+				self.hp = 100
+				self.dir = self.startdir
+				self.speed = 0
 		else:
 			self.rotate_sprite(self.dir)
 			self.thrust()

@@ -13,7 +13,7 @@ class Game():
 		# Initialize pygame
 		pygame.init()
 		# Naming the display surface
-		self.screen = pygame.display.set_mode([SCREENWIDTH,SCREENHEIGHT])
+		self.screen = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT), pygame.FULLSCREEN, 32)
 		# Setting the caption of window
 		pygame.display.set_caption(CAPTION, 'Space')
 		# Setting up sound
@@ -59,8 +59,8 @@ class Game():
 		self.fuel_list = pygame.sprite.Group()
 		self.asteroid_list = pygame.sprite.Group()
 
-		self.player1 = Player(50, SCREENHEIGHT//2, 0) #P1STARTPOS and STARTANGLE???
-		self.player2 = Player(SCREENWIDTH -50, SCREENHEIGHT//2, 180) #P2STARTPOS and STARTANGLE???
+		self.player1 = Player(P1STARTPOS, P1STARTANGLE)
+		self.player2 = Player(P2STARTPOS, P2STARTANGLE)
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
 		
@@ -110,11 +110,10 @@ class Game():
 				self.player2.hp = 0
 				self.player1.dead = True 
 				self.player2.dead = True
-				self.p1death = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 200, 200)
-				self.p2death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 200, 200)
-				self.all_sprites_list.add(self.p1death, self.p2death)
-				self.player1.kill()
-				self.player2.kill()
+				self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
+				self.all_sprites_list.add(self.supadeath)
+				self.player1.squish(P1DEADPOS)
+				self.player2.squish(P2DEADPOS)
 				#self.setup()
 
 	def eventhandler(self):
