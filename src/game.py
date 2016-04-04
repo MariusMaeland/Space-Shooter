@@ -78,9 +78,9 @@ class Game():
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
 
-	
-		self.asteroid = Asteroid(self.asteroid_list)
-		self.all_sprites_list.add(self.asteroid)
+		for i in range(ASTEROIDSNUM):
+			self.asteroid = Asteroid(self.asteroid_list)
+			self.all_sprites_list.add(self.asteroid)
 		
 		#self.death = Explosion(self.explosion_list, 600, 350, 500, 500)
 		#self.all_sprites_list.add(self.death)
