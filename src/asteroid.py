@@ -4,9 +4,10 @@ import pygame
 from precode import *
 
 class Asteroid(pygame.sprite.Sprite):
-	def __init__(self, asteroidlist, x, y, width = 100, height = 100):
+	def __init__(self, asteroidlist, width = 100, height = 100):
 		super().__init__()
 		self.posx = random.randrange(0, SCREENWIDTH, 1)
+		self.posy = -10
 		#Set random spawn over or under the screen
 		self.random_spawn = random.randrange(0, 10, 1)
 		self.random_speedx = random.randrange(-3, 3, 1)

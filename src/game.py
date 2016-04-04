@@ -78,7 +78,8 @@ class Game():
 		self.all_sprites_list.add(self.player1)
 		self.all_sprites_list.add(self.player2)
 
-		self.asteroid = Asteroid(self.asteroid_list, 600, 350)
+	
+		self.asteroid = Asteroid(self.asteroid_list)
 		self.all_sprites_list.add(self.asteroid)
 		
 		#self.death = Explosion(self.explosion_list, 600, 350, 500, 500)
@@ -142,6 +143,22 @@ class Game():
 				self.player2.kills -= 1
 				#self.setup()
 
+		if pygame.sprite.collide_mask(self.player1, self.asteroid):
+			self.player1.hp = 0 
+			self.player1.dead = True 
+			self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
+			self.all_sprites_list.add(self.supadeath)
+			self.player1.squish(P1DEADPOS)
+			self.player1.fuel = 100
+
+		if pygame.sprite.collide_mask(self.player2, self.asteroid):
+			self.player2.hp = 0
+			self.player2.dead = True
+			self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player1.rect.centery, 400, 400)
+			self.all_sprites_list.add(self.supadeath)
+			self.player2.squish(P2DEADPOS)
+			self.player2.fuel = 100
+	
 	def eventhandler(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
