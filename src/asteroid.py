@@ -12,8 +12,13 @@ class Asteroid(pygame.sprite.Sprite):
 		#	self.posy = random.randrange(0, -200)
 		#if self.random_spawn == 2:
 		#	self.posy = random.randrange(SCREENHEIGHT, SCREENHEIGHT+200)
-		self.astlist = asteroidlist
 		#self.pos = Vector2D(self.posx, self.posy)
+		#self.random_speed = random.randrange(-3, 3)
+		#self.speedx = self.random_speed
+		#self.speedy = self.random_speed
+		#self.speed = Vector2D(self.speedx, self.speedy)
+		
+		self.astlist = asteroidlist
 		self.image = self.astlist[0]
 		self.rect = self.image.get_rect()
 		self.width = width
@@ -21,13 +26,9 @@ class Asteroid(pygame.sprite.Sprite):
 		self.rect.x = x - (self.width//2)
 		self.rect.y = y - (self.height//2)
 		self.nr = 0
-		self.random_speed = random.randrange(-3, 3)
-		self.speedx = self.random_speed
-		self.speedy = self.random_speed
-		self.speed = Vector2D(self.speedx, self.speedy)
 	
 	def update(self, screen, list):
 		
 		self.image = pygame.transform.scale(self.astlist[self.nr], (self.width, self.height))
 		self.nr += 1
-		self.nr %= 64
+		self.nr %= 96

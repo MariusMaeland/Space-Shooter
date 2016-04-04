@@ -41,15 +41,25 @@ class Player(pygame.sprite.Sprite):
 		self.hp = 100
 		self.respawn_tick = 0
 
+		self.kills = 0
+		self.fuel = 100
+
 	def squish(self, deadpos):
 		self.rect.center = deadpos
 
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
 		if self.thrusting:
-			# Makes the ship accelerate instead of instant getting top speed
-			self.speed = min(7, self.speed+1)
+			if self.fuel == 0:
+				self.thrusting = False
+
+			if self.fuel > 0:
+				# Makes the ship accelerate instead of instant getting top speed
+				self.fuel -= 0.2
+				self.speed = min(7, self.speed+1)
+
 			self.thrusting = False
+
 
 	def fire(self, all_sprites_list, bullet_list):
 		"""Fires a shot, takes in all_sprites_list to get access to the group
