@@ -7,7 +7,7 @@ class Asteroid(pygame.sprite.Sprite):
 	def __init__(self, asteroidlist, width = 100, height = 100):
 		super().__init__()
 		self.posx = random.randrange(0, SCREENWIDTH, 1)
-		self.posy = 0
+		#self.posy = 0
 		#Set random spawn over or under the screen
 		self.random_spawn = random.randrange(0, 10, 1)
 
@@ -15,7 +15,7 @@ class Asteroid(pygame.sprite.Sprite):
 		self.speedx = self.random_speedx
 
 		self.speedy = 0
-		if self.random_spawn > 5:
+		if self.random_spawn >= 5:
 			self.posy = random.randrange(-200, 0, 1)
 			self.speedy = random.randrange(1, 3, 1)
 		if self.random_spawn < 5:
