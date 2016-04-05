@@ -139,8 +139,6 @@ class Game():
 				self.player1.fuel = 100
 				self.player2.fuel = 100
 				
-				self.player1.kills -= 1
-				self.player2.kills -= 1
 				#self.setup()
 
 		if pygame.sprite.collide_mask(self.player1, self.asteroid):
