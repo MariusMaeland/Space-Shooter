@@ -25,7 +25,8 @@ class Game():
 		self.clock = pygame.time.Clock()
 		self.background = pygame.image.load("images/space.png")
 		# Loading font
-		self.font = pygame.font.SysFont('fonts/Roboto-Black.ttf', 20, False, False)
+		self.font = pygame.font.SysFont('fonts/Roboto-Black.ttf', 25, False, False)
+
 
 	def setup(self):
 		# -------------------- 360 Controller Works --------------------------
@@ -101,7 +102,8 @@ class Game():
 		self.all_sprites_list.add(self.player1, self.player2)
 
 		for i in range(ASTEROIDSNUM):
-			self.asteroid = Asteroid(self.asteroid_list)
+			size = random.randint(30, 150)
+			self.asteroid = Asteroid(self.asteroid_list, size, size)
 			self.all_sprites_list.add(self.asteroid)
 			self.asteroid_group.add(self.asteroid)
 		for i in range(FUELNUM):
@@ -112,6 +114,11 @@ class Game():
 			self.health = Health(self.health_list)
 			self.all_sprites_list.add(self.health)
 			self.health_group.add(self.health)
+
+		self.p1_ammo = self.font.render('Ammo: %d' % self.player1.ammo, True, WHITE)
+		self.p2_ammo = self.font.render('Ammo: %d' % self.player2.ammo, True, WHITE)
+		self.p1_stats = self.font.render('kills: %d' % self.player1.kills, True, WHITE)
+		self.p2_stats = self.font.render('kills: %d' % self.player2.kills, True, WHITE)
 
 	def collisionchecks(self):
 		#-----------------------------------------------------------------------
@@ -246,18 +253,12 @@ class Game():
 	def player_info(self):
 		"""Setting up player information and blitting it on the screen"""
 
-		p1_ammo = self.font.render('Ammo: %d' % self.player1.ammo, True, WHITE)
-		p2_ammo = self.font.render('Ammo: %d' % self.player2.ammo, True, WHITE)
-
-		p1_stats = self.font.render('kills: %d' % self.player1.kills, True, WHITE)
-		p2_stats = self.font.render('kills: %d' % self.player2.kills, True, WHITE)
-
 		#player 1 stats and ammo info
-		self.screen.blit(p1_stats, [10, 10])
-		self.screen.blit(p1_ammo, [10, 30])
+		self.screen.blit(self.p1_stats, [10, 10])
+		self.screen.blit(self.p1_ammo, [10, 30])
 		#player 2 stats and ammo info
-		self.screen.blit(p2_stats, [SCREENWIDTH - 105, 10])
-		self.screen.blit(p2_ammo, [SCREENWIDTH - 105, 30])
+		self.screen.blit(self.p2_stats, [SCREENWIDTH - 105, 10])
+		self.screen.blit(self.p2_ammo, [SCREENWIDTH - 105, 30])
 		#Player 1 hp-bar:
 		pygame.draw.rect(self.screen, WHITE, (10, (SCREENHEIGHT-30), 202, 12), 1)
 		pygame.draw.rect(self.screen, RED, (11, (SCREENHEIGHT-29), (self.player1.hp * 2), 10))
@@ -285,7 +286,6 @@ class Game():
 					self.all_sprites_list.draw(self.screen)
 					self.player_info()
 					self.collisionchecks()
-					print(self.all_sprites_list)
 					pygame.display.flip()
 					# Limit to 60 frames per second
 					self.clock.tick(FPS)
