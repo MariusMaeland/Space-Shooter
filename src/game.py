@@ -8,6 +8,7 @@ from player import Player
 from asteroid import Asteroid
 from explosion import Explosion
 from fuel import Fuel
+from health import Health
 
 class Game():
 	"""Initializes the game and handles user input, loading, pausing etc..."""
@@ -70,11 +71,20 @@ class Game():
 		#-----------------------------------------------------------------------
 		self.fuel_image = pygame.image.load("images/fuelsheet.png").convert_alpha()
 		self.fuel_list = []
-		self.fsw = 1340//10 # Divide by eight because there are eight images per row on the sheet. ESW = explosion sheet witdh.
-		for i in range(10): # Because there are 8 rows of images on the sheet 
+		self.fsw = 1340//10 # Divide by eight because there are eight images per row on the sheet. FSW = fuel sheet witdh.
+		for i in range(10):
 			for n in range(3):
 				self.fuel_list.append(self.fuel_image.subsurface(i*self.fsw, 0, self.fsw, 128))
-		print(len(self.fuel_list))
+
+		#-----------------------------------------------------------------------
+		#                    SETTING UP HEALTH-SHEET
+		#-----------------------------------------------------------------------
+		self.health_image = pygame.image.load("images/healthsheet.png").convert_alpha()
+		self.health_list = []
+		self.hsw = 1340//10 # Divide by eight because there are eight images per row on the sheet. HSW = health sheet witdh.
+		for i in range(10):
+			for n in range(3):
+				self.health_list.append(self.health_image.subsurface(i*self.hsw, 0, self.hsw, 128))
 
 		#-----------------------------------------------------------------------
 		#                    SETTING UP SPRITEGROUPS
@@ -84,11 +94,11 @@ class Game():
 		self.player2_bullets = pygame.sprite.Group()
 		self.fuel_group = pygame.sprite.Group()
 		self.asteroid_group = pygame.sprite.Group()
+		self.health_group = pygame.sprite.Group()
 
 		self.player1 = Player(P1STARTPOS, P1STARTANGLE)
 		self.player2 = Player(P2STARTPOS, P2STARTANGLE)
-		self.all_sprites_list.add(self.player1)
-		self.all_sprites_list.add(self.player2)
+		self.all_sprites_list.add(self.player1, self.player2)
 
 		for i in range(ASTEROIDSNUM):
 			self.asteroid = Asteroid(self.asteroid_list)
@@ -98,6 +108,10 @@ class Game():
 			self.fuel = Fuel(self.fuel_list)
 			self.all_sprites_list.add(self.fuel)
 			self.fuel_group.add(self.fuel)
+		for i in range(HEALTHNUM):
+			self.health = Health(self.health_list)
+			self.all_sprites_list.add(self.health)
+			self.health_group.add(self.health)
 
 	def collisionchecks(self):
 		#-----------------------------------------------------------------------
@@ -185,7 +199,19 @@ class Game():
 			 	if self.player2.fuel < 100:
 				 	self.player2.fuel += 0.4
 				 	fuelthingy.amount -= 0.4
-	
+
+		#-----------------------------------------------------------------------
+		#      If the players get a healing-crystal
+		#-----------------------------------------------------------------------	
+		for crystal in self.health_group:
+			if pygame.sprite.collide_mask(crystal, self.player1):
+				self.player1.hp = min(100, self.player1.hp + crystal.amount)
+				crystal.respawn()
+
+			if pygame.sprite.collide_mask(crystal, self.player2):
+			 	self.player2.hp = min(100, self.player2.hp + crystal.amount)
+			 	crystal.respawn()
+
 	def eventhandler(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
