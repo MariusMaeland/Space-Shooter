@@ -152,8 +152,9 @@ class Game():
 				self.player2.squish(P2DEADPOS)
 				self.player1.fuel = 100
 				self.player2.fuel = 100
-				
-				#self.setup()
+		#-----------------------------------------------------------------------
+		#                  If players crash in asteroids!
+		#-----------------------------------------------------------------------			
 		for rock in self.asteroid_group:
 			if pygame.sprite.collide_mask(self.player1, rock):
 				self.player1.hp = 0 
@@ -162,6 +163,7 @@ class Game():
 				self.all_sprites_list.add(self.supadeath)
 				self.player1.squish(P1DEADPOS)
 				self.player1.fuel = 100
+				rock.respawn()
 
 			if pygame.sprite.collide_mask(self.player2, rock):
 				self.player2.hp = 0
@@ -170,8 +172,9 @@ class Game():
 				self.all_sprites_list.add(self.supadeath)
 				self.player2.squish(P2DEADPOS)
 				self.player2.fuel = 100
+				rock.respawn()
 		#-----------------------------------------------------------------------
-		#                    If the players crash!
+		#      If the players are refueling their respective fuel tanks
 		#-----------------------------------------------------------------------	
 		for fuelthingy in self.fuel_group:
 			if pygame.sprite.collide_mask(fuelthingy, self.player1):
