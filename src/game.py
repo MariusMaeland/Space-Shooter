@@ -7,6 +7,7 @@ from bullet import Bullet
 from player import Player
 from asteroid import Asteroid
 from explosion import Explosion
+from fuel import Fuel
 
 class Game():
 	"""Initializes the game and handles user input, loading, pausing etc..."""
@@ -63,6 +64,16 @@ class Game():
 					self.asteroid_list.append(self.asteroid_image.subsurface(j*self.asw, i*self.asw, self.asw, self.asw))
 
 		print(len(self.asteroid_list))
+		
+		#-----------------------------------------------------------------------
+		#                    SETTING UP FUEL-SHEET
+		#-----------------------------------------------------------------------
+		self.fuel_image = pygame.image.load("images/fuelsheet.png").convert_alpha()
+		self.fuel_list = []
+		self.fsw = 1340//10 # Divide by eight because there are eight images per row on the sheet. ESW = explosion sheet witdh.
+		for i in range(10): # Because there are 8 rows of images on the sheet 
+			for n in range(3):
+				self.fuel_list.append(self.fuel_image.subsurface(i*self.fsw, 0, self.fsw, 128))
 
 		#-----------------------------------------------------------------------
 		#                    SETTING UP SPRITEGROUPS
@@ -70,7 +81,7 @@ class Game():
 		self.all_sprites_list = pygame.sprite.Group()
 		self.player1_bullets = pygame.sprite.Group()
 		self.player2_bullets = pygame.sprite.Group()
-		self.fuel_list = pygame.sprite.Group()
+		#self.fuel_list = pygame.sprite.Group()
 		#self.asteroid_list = pygame.sprite.Group()
 
 		self.player1 = Player(P1STARTPOS, P1STARTANGLE)
@@ -81,6 +92,9 @@ class Game():
 		for i in range(ASTEROIDSNUM):
 			self.asteroid = Asteroid(self.asteroid_list)
 			self.all_sprites_list.add(self.asteroid)
+		for i in range(FUELNUM):
+			self.fuel = Fuel(self.fuel_list)
+			self.all_sprites_list.add(self.fuel)
 		
 		#self.death = Explosion(self.explosion_list, 600, 350, 500, 500)
 		#self.all_sprites_list.add(self.death)
