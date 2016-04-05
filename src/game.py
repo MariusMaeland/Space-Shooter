@@ -15,7 +15,7 @@ class Game():
 		# Initialize pygame
 		pygame.init()
 		# Naming the display surface
-		self.screen = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT), pygame.FULLSCREEN, 32)
+		self.screen = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT))
 		# Setting the caption of window
 		pygame.display.set_caption(CAPTION, 'Space')
 		# Setting up sound
@@ -74,6 +74,7 @@ class Game():
 		for i in range(10): # Because there are 8 rows of images on the sheet 
 			for n in range(3):
 				self.fuel_list.append(self.fuel_image.subsurface(i*self.fsw, 0, self.fsw, 128))
+		print(len(self.fuel_list))
 
 		#-----------------------------------------------------------------------
 		#                    SETTING UP SPRITEGROUPS
@@ -81,8 +82,8 @@ class Game():
 		self.all_sprites_list = pygame.sprite.Group()
 		self.player1_bullets = pygame.sprite.Group()
 		self.player2_bullets = pygame.sprite.Group()
-		#self.fuel_list = pygame.sprite.Group()
-		#self.asteroid_list = pygame.sprite.Group()
+		self.fuel_group = pygame.sprite.Group()
+		self.asteroid_group = pygame.sprite.Group()
 
 		self.player1 = Player(P1STARTPOS, P1STARTANGLE)
 		self.player2 = Player(P2STARTPOS, P2STARTANGLE)
@@ -92,16 +93,15 @@ class Game():
 		for i in range(ASTEROIDSNUM):
 			self.asteroid = Asteroid(self.asteroid_list)
 			self.all_sprites_list.add(self.asteroid)
+			self.asteroid_group.add(self.asteroid)
 		for i in range(FUELNUM):
 			self.fuel = Fuel(self.fuel_list)
 			self.all_sprites_list.add(self.fuel)
-		
-		#self.death = Explosion(self.explosion_list, 600, 350, 500, 500)
-		#self.all_sprites_list.add(self.death)
+			self.fuel_group.add(self.fuel)
 
 	def collisionchecks(self):
 		#-----------------------------------------------------------------------
-		#                    Player 2 gets hit or killed!
+		#                    Player 2 gets hit or killed by player 1!
 		#-----------------------------------------------------------------------
 		for bullet in self.player1_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player2):
@@ -118,7 +118,7 @@ class Game():
 						self.player2.fuel = 100
 				bullet.kill()
 		#-----------------------------------------------------------------------
-		#                    Player 1 gets hit or killed!
+		#                    Player 1 gets hit or killed by player 2!
 		#-----------------------------------------------------------------------
 		for bullet in self.player2_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player1):
@@ -136,7 +136,7 @@ class Game():
 					
 				bullet.kill()
 		#-----------------------------------------------------------------------
-		#                    If the player collides!
+		#                    If the players crash!
 		#-----------------------------------------------------------------------	
 		if pygame.sprite.collide_mask(self.player1, self.player2):
 			if (self.player1.dead or self.player2.dead):
@@ -154,22 +154,34 @@ class Game():
 				self.player2.fuel = 100
 				
 				#self.setup()
+		for rock in self.asteroid_group:
+			if pygame.sprite.collide_mask(self.player1, rock):
+				self.player1.hp = 0 
+				self.player1.dead = True 
+				self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
+				self.all_sprites_list.add(self.supadeath)
+				self.player1.squish(P1DEADPOS)
+				self.player1.fuel = 100
 
-		if pygame.sprite.collide_mask(self.player1, self.asteroid):
-			self.player1.hp = 0 
-			self.player1.dead = True 
-			self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
-			self.all_sprites_list.add(self.supadeath)
-			self.player1.squish(P1DEADPOS)
-			self.player1.fuel = 100
-
-		if pygame.sprite.collide_mask(self.player2, self.asteroid):
-			self.player2.hp = 0
-			self.player2.dead = True
-			self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
-			self.all_sprites_list.add(self.supadeath)
-			self.player2.squish(P2DEADPOS)
-			self.player2.fuel = 100
+			if pygame.sprite.collide_mask(self.player2, rock):
+				self.player2.hp = 0
+				self.player2.dead = True
+				self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
+				self.all_sprites_list.add(self.supadeath)
+				self.player2.squish(P2DEADPOS)
+				self.player2.fuel = 100
+		#-----------------------------------------------------------------------
+		#                    If the players crash!
+		#-----------------------------------------------------------------------	
+		for fuelthingy in self.fuel_group:
+			if pygame.sprite.collide_mask(fuelthingy, self.player1):
+				if self.player1.fuel < 100:
+				 	self.player1.fuel += 0.4
+				 	fuelthingy.amount -= 0.4
+			if pygame.sprite.collide_mask(fuelthingy, self.player2):
+			 	if self.player2.fuel < 100:
+				 	self.player2.fuel += 0.4
+				 	fuelthingy.amount -= 0.4
 	
 	def eventhandler(self):
 		for event in pygame.event.get():
