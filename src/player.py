@@ -18,14 +18,19 @@ class Player(pygame.sprite.Sprite):
 		self.rect.center = (self.startx, self.starty)
 		# Load the image for the thruster-flame
 		self.thrusterimage = pygame.image.load("images/jetflame.png").convert_alpha()
+		self.shieldimage = pygame.image.load("images/shieldsheet.png").convert_alpha()
 		self.thruster = []
+		self.shield = []
 		 # Calculating how many pixels to cut each time from the sheet.
 		self.thruster_width = 1920//30
 		# Sprite number from the thruster list.
-		self.nr = 0 
+		self.nr = 0
+		self.shieldnr = 0
 		# Cut from the spritesheet and add them to the thruster-list.
 		for i in range(30):
 			self.thruster.append(self.thrusterimage.subsurface((i*self.thruster_width, 0, self.thruster_width, self.thruster_width)))
+		for x in range(18):
+			self.shield.append(self.shieldimage.subsurface((x*133, 0, 133, 133)))
 		# Various attributes
 		self.startdir = start_angle
 		self.dir = start_angle
@@ -38,6 +43,8 @@ class Player(pygame.sprite.Sprite):
 		self.rate_of_fire = 100
 		# Health-problems
 		self.dead = False
+		self.invincible = False
+		self.invincible_tick = 0
 		self.hp = 100
 		self.respawn_tick = 0
 
@@ -104,7 +111,13 @@ class Player(pygame.sprite.Sprite):
 				self.hp = 100
 				self.dir = self.startdir
 				self.speed = 0
+				self.invincible = True
 		else:
+			if self.invincible:
+				self.invincible_tick += 1
+				if self.invincible_tick > (FPS * 4):
+					self.invincible = False
+					self.invincible_tick = 0
 			self.rotate_sprite(self.dir)
 			self.thrust()
 			self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
@@ -116,15 +129,20 @@ class Player(pygame.sprite.Sprite):
 		"""Rotating the image and rect"""
 		#get original center because new Rect center will change with image transformation.
 		oldCenter = sprite.rect.center
-		flamey_ship = pygame.Surface((200, 100))
+		flamey_ship = pygame.Surface((200, 200))
 		ship_mask = flamey_ship.copy()
 		#pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
 		if sprite.thrusting:
-			flamey_ship.blit(sprite.thruster[sprite.nr], (25, 20))
+			flamey_ship.blit(sprite.thruster[sprite.nr], (27, 70))
 		sprite.nr += 1
 		sprite.nr %= 30
-		flamey_ship.blit(sprite.origimage, (75,25))
-		ship_mask.blit(sprite.origimage, (75,25))
+		flamey_ship.blit(sprite.origimage, (75,75))
+		ship_mask.blit(sprite.origimage, (75,75))
+		if sprite.invincible:
+			flamey_ship.blit(sprite.shield[sprite.shieldnr], (29,35))
+		sprite.shieldnr += 1
+		print(len(sprite.shield))
+		sprite.shieldnr %= 18
 		flamey_ship.set_colorkey((0,0,0))
 		ship_mask.set_colorkey((0,0,0))
 		#use pygame.transform.rotate(<image_to_rotate>, <turn_degrees>)
