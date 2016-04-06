@@ -10,6 +10,7 @@ from explosion import Explosion
 from fuel import Fuel
 from health import Health
 from precode import *
+from functions import *
 
 class Game():
 	"""Initializes the game and handles user input, loading, pausing etc..."""
@@ -88,6 +89,10 @@ class Game():
 			for n in range(3):
 				self.health_list.append(self.health_image.subsurface(i*self.hsw, 0, self.hsw, 128))
 
+		self.dust_sheet = pygame.image.load("images/dust_sheet.png").convert_alpha()
+		self.dust_list = img_list(self.dust_sheet, 8, 3)
+		print(len(self.dust_list))
+
 		#-----------------------------------------------------------------------
 		#                    SETTING UP SPRITEGROUPS
 		#-----------------------------------------------------------------------
@@ -115,11 +120,6 @@ class Game():
 			self.health = Health(self.health_list)
 			self.all_sprites_list.add(self.health)
 			self.health_group.add(self.health)
-
-		self.p1_ammo = self.font.render('Ammo: %d' % self.player1.ammo, True, WHITE)
-		self.p2_ammo = self.font.render('Ammo: %d' % self.player2.ammo, True, WHITE)
-		self.p1_stats = self.font.render('kills: %d' % self.player1.kills, True, WHITE)
-		self.p2_stats = self.font.render('kills: %d' % self.player2.kills, True, WHITE)
 
 	def collisionchecks(self):
 		#-----------------------------------------------------------------------
@@ -229,7 +229,11 @@ class Game():
 						pygame.draw.rect(self.screen, (255,0,0), asteroid.rect, 1)
 						pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
 
-						if pygame.sprite.collide_mask(asteroid, rock):
+						point = pygame.sprite.collide_mask(asteroid, rock)
+						if point:
+							#print(point)
+							dustexp = Explosion(self.dust_list, point[0]+asteroid.rect.x, point[1]+asteroid.rect.y, 50, 50)
+							self.all_sprites_list.add(dustexp)
 							#outlinea = asteroid.mask.outline()
 							#outlineb = rock.mask.outline()
 							#pygame.draw.lines(asteroid.image, (255, 255, 0), 1, outlinea)
@@ -270,7 +274,10 @@ class Game():
 
 	def player_info(self):
 		"""Setting up player information and blitting it on the screen"""
-
+		self.p1_ammo = self.font.render('Ammo: %d' % self.player1.ammo, True, WHITE)
+		self.p2_ammo = self.font.render('Ammo: %d' % self.player2.ammo, True, WHITE)
+		self.p1_stats = self.font.render('kills: %d' % self.player1.kills, True, WHITE)
+		self.p2_stats = self.font.render('kills: %d' % self.player2.kills, True, WHITE)
 		#player 1 stats and ammo info
 		self.screen.blit(self.p1_stats, [10, 10])
 		self.screen.blit(self.p1_ammo, [10, 30])
