@@ -9,29 +9,38 @@ class Asteroid(pygame.sprite.Sprite):
 		self.astlist = asteroidlist
 		self.image = self.astlist[0]
 		self.rect = self.image.get_rect()
-		
-		#Set random spawn over or under the screen
-		self.respawn()
+		self.pos = Vector2D(random.randint(0, SCREENWIDTH),random.choice([i for j in (range(-200, 0), range(SCREENHEIGHT, SCREENHEIGHT + 200)) for i in j]))
+		self.speed = Vector2D(random.randint(-3, 3),random.randint(1, 3) if self.rect.y < 0 else random.randint(-3, -1))
 		self.width = width
 		self.height = height
+		self.radius = (width//2)-17
 		self.nr = 0
+		
 
 	def respawn(self):
-		self.rect.x = random.randint(0, SCREENWIDTH)
-		self.rect.y = random.choice([i for j in (range(-200, 0), range(SCREENHEIGHT, SCREENHEIGHT + 200)) for i in j])
-		self.speedy = random.randint(1, 3) if self.rect.y < 0 else random.randint(-3, -1)
-		self.speedx = random.randint(-3, 3)
+		self.pos.x = random.randint(0, SCREENWIDTH)
+		self.pos.y = random.choice([i for j in (range(-200, 0), range(SCREENHEIGHT, SCREENHEIGHT + 200)) for i in j])
+		self.speed.x = random.randint(-3, 3)
+		self.speed.y = random.randint(1, 3) if self.rect.y < 0 else random.randint(-3, -1)
 	def update(self, screen, list):
-		if self.speedy > 0:
-			if self.rect.y > SCREENHEIGHT:
+		if self.speed.y > 0:
+			if self.pos.y > SCREENHEIGHT:
 				self.respawn()
 				#print('respawn')
-		if self.speedy < 0:
-			if self.rect.y < 0:
+		if self.speed.y < 0:
+			if self.pos.y < 0:
 				self.respawn()
 				#print('respawn')
 		self.image = pygame.transform.scale(self.astlist[self.nr], (self.width, self.height))
 		self.nr += 1
 		self.nr %= 96
-		self.rect.x += self.speedx
-		self.rect.y += self.speedy
+		
+		self.rect.x = self.pos.x
+		self.rect.y = self.pos.y
+		
+		if self.speed.magnitude() > ASTEROIDSMAXSPEED:
+			self.speed = self.speed.normalized() * ASTEROIDSMAXSPEED
+		if self.speed.magnitude() < ASTEROIDSMINSPEED:
+			self.speed = self.speed.normalized() * ASTEROIDSMINSPEED
+		self.pos += self.speed
+

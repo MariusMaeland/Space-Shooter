@@ -9,6 +9,7 @@ from asteroid import Asteroid
 from explosion import Explosion
 from fuel import Fuel
 from health import Health
+from precode import *
 
 class Game():
 	"""Initializes the game and handles user input, loading, pausing etc..."""
@@ -102,8 +103,8 @@ class Game():
 		self.all_sprites_list.add(self.player1, self.player2)
 
 		for i in range(ASTEROIDSNUM):
-			size = random.randint(30, 150)
-			self.asteroid = Asteroid(self.asteroid_list, size, size)
+			#size = random.randint(30, 150)
+			self.asteroid = Asteroid(self.asteroid_list)
 			self.all_sprites_list.add(self.asteroid)
 			self.asteroid_group.add(self.asteroid)
 		for i in range(FUELNUM):
@@ -218,6 +219,16 @@ class Game():
 			if pygame.sprite.collide_mask(crystal, self.player2):
 			 	self.player2.hp = min(100, self.player2.hp + crystal.amount)
 			 	crystal.respawn()
+		#-----------------------------------------------------------------------
+		#      If asteroids collide with asteroids
+		#-----------------------------------------------------------------------	
+		for asteroid in self.asteroid_group:
+			for rock in self.asteroid_group:
+				if not asteroid.pos == rock.pos:
+					collision = intersect_circles(asteroid.pos, asteroid.radius, rock.pos, rock.radius)
+
+					if collision:
+						asteroid.speed -= asteroid.speed.magnitude() * collision
 
 	def eventhandler(self):
 		for event in pygame.event.get():
