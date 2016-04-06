@@ -24,11 +24,11 @@ class Asteroid(pygame.sprite.Sprite):
 		self.speed.y = random.randint(1, 3) if self.rect.y < 0 else random.randint(-3, -1)
 	def update(self, screen, list):
 		if self.speed.y > 0:
-			if self.pos.y > SCREENHEIGHT:
+			if self.rect.top > SCREENHEIGHT:
 				self.respawn()
 				#print('respawn')
 		if self.speed.y < 0:
-			if self.pos.y < 0:
+			if self.rect.bottom < 0:
 				self.respawn()
 				#print('respawn')
 		self.image = pygame.transform.scale(self.astlist[self.nr], (self.width, self.height))

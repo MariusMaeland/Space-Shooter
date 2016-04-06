@@ -228,10 +228,14 @@ class Game():
 					if pygame.sprite.collide_rect(asteroid, rock):
 						pygame.draw.rect(self.screen, (255,0,0), asteroid.rect, 1)
 						pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
+
 						if pygame.sprite.collide_mask(asteroid, rock):
-							collision = intersect_circles(asteroid.pos, asteroid.radius, rock.pos, rock.radius)
-							if collision:
-								asteroid.speed -= asteroid.speed.magnitude() * collision
+							#outlinea = asteroid.mask.outline()
+							#outlineb = rock.mask.outline()
+							#pygame.draw.lines(asteroid.image, (255, 255, 0), 1, outlinea)
+							#pygame.draw.lines(rock.image, (255, 255, 0), 1, outlineb)
+							collision = (asteroid.pos - rock.pos).normalized() * (-1)
+							asteroid.speed -= asteroid.speed.magnitude() * collision
 
 	def eventhandler(self):
 		for event in pygame.event.get():
