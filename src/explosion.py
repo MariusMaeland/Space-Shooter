@@ -7,7 +7,7 @@ class Explosion(pygame.sprite.Sprite):
 		""" Constructor. Creates an explosion. """
 		super().__init__()
 		self.explist = explosionlist
-		self.image = self.explist[0]
+		self.image = None
 		self.rect = self.image.get_rect()
 		self.width = width
 		self.height = height
