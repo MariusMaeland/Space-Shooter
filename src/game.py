@@ -221,14 +221,17 @@ class Game():
 			 	crystal.respawn()
 		#-----------------------------------------------------------------------
 		#      If asteroids collide with asteroids
-		#-----------------------------------------------------------------------	
+		#-----------------------------------------------------------------------
 		for asteroid in self.asteroid_group:
 			for rock in self.asteroid_group:
-				if not asteroid.pos == rock.pos:
-					collision = intersect_circles(asteroid.pos, asteroid.radius, rock.pos, rock.radius)
-
-					if collision:
-						asteroid.speed -= asteroid.speed.magnitude() * collision
+				if rock is not asteroid:
+					if pygame.sprite.collide_rect(asteroid, rock):
+						pygame.draw.rect(self.screen, (255,0,0), asteroid.rect, 1)
+						pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
+						if pygame.sprite.collide_mask(asteroid, rock):
+							collision = intersect_circles(asteroid.pos, asteroid.radius, rock.pos, rock.radius)
+							if collision:
+								asteroid.speed -= asteroid.speed.magnitude() * collision
 
 	def eventhandler(self):
 		for event in pygame.event.get():

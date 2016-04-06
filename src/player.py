@@ -131,7 +131,7 @@ class Player(pygame.sprite.Sprite):
 		oldCenter = sprite.rect.center
 		flamey_ship = pygame.Surface((200, 200))
 		ship_mask = flamey_ship.copy()
-		#pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
+		pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
 		if sprite.thrusting:
 			flamey_ship.blit(sprite.thruster[sprite.nr], (27, 70))
 		sprite.nr += 1
