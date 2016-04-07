@@ -143,7 +143,8 @@ class Player(pygame.sprite.Sprite):
 		flamey_ship.blit(sprite.origimage, (surfsize//2-sprite.scale//2,surfsize//2-sprite.scale//2))
 		ship_mask.blit(sprite.origimage, (surfsize//2-sprite.scale//2,surfsize//2-sprite.scale//2))
 		if sprite.invincible:
-			flamey_ship.blit(sprite.shield[sprite.shieldnr], (29,35))
+			#flamey_ship.blit(sprite.shield[sprite.shieldnr], (29,35))
+			pass
 		sprite.shieldnr += 1
 		sprite.shieldnr %= 18
 		flamey_ship.set_colorkey((0,0,0))

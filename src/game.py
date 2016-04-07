@@ -8,7 +8,7 @@ from player import Player
 from asteroid import Asteroid
 from explosion import Explosion
 from fuel import Fuel
-from health import Health
+from animation import Animation
 from precode import *
 from functions import *
 
@@ -66,8 +66,6 @@ class Game():
 			for j in range(8):
 				for n in range(3):
 					self.asteroid_list.append(self.asteroid_image.subsurface(j*self.asw, i*self.asw, self.asw, self.asw))
-
-		print(len(self.asteroid_list))
 		
 		#-----------------------------------------------------------------------
 		#                    SETTING UP FUEL-SHEET
@@ -91,7 +89,13 @@ class Game():
 
 		self.dust_sheet = pygame.image.load("images/dust_sheet.png").convert_alpha()
 		self.dust_list = img_list(self.dust_sheet, 8, 3)
-		print(len(self.dust_list))
+
+		self.hole_sheet = pygame.image.load("images/greenhole_sheet.png").convert_alpha()
+		self.hole_list = []
+		self.smbh = (self.hole_sheet.get_width()-90)//15
+		for x in range(15):
+			for f in range(2):
+				self.hole_list.append(self.hole_sheet.subsurface(x*self.smbh+x*6, 0, self.smbh, self.smbh))
 
 		#-----------------------------------------------------------------------
 		#                    SETTING UP SPRITEGROUPS
@@ -117,11 +121,19 @@ class Game():
 			self.all_sprites_list.add(self.fuel)
 			self.fuel_group.add(self.fuel)
 		for i in range(HEALTHNUM):
-			self.health = Health(self.health_list)
+			self.health = Animation(self.health_list, (random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+													  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
+													   44, 42)
 			self.all_sprites_list.add(self.health)
 			self.health_group.add(self.health)
 
+		self.blackhole = Animation(self.hole_list, SCREENWIDTH//2, SCREENHEIGHT//2, 100, 100)
+		self.all_sprites_list.add(self.blackhole)
+		
+
 	def collisionchecks(self):
+		pygame.draw.line(self.screen, RED, (SCREENWIDTH//2, 0), (SCREENWIDTH//2, SCREENHEIGHT),1 )
+		pygame.draw.line(self.screen, RED, (0, SCREENHEIGHT//2), (SCREENWIDTH, SCREENHEIGHT//2), 1)
 		#-----------------------------------------------------------------------
 		#                    Player 2 gets hit or killed by player 1!
 		#-----------------------------------------------------------------------
@@ -214,11 +226,13 @@ class Game():
 		for crystal in self.health_group:
 			if pygame.sprite.collide_mask(crystal, self.player1):
 				self.player1.hp = min(100, self.player1.hp + crystal.amount)
-				crystal.respawn()
+				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
 			if pygame.sprite.collide_mask(crystal, self.player2):
 			 	self.player2.hp = min(100, self.player2.hp + crystal.amount)
-			 	crystal.respawn()
+			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 		#-----------------------------------------------------------------------
 		#      If asteroids collide with asteroids
 		#-----------------------------------------------------------------------
