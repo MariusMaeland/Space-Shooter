@@ -10,7 +10,8 @@ class Player(pygame.sprite.Sprite):
 		""" Constructor. Creates a player. """
 		super().__init__()
 		# Set the starting image
-		self.origimage = pygame.transform.scale(pygame.image.load(random.choice(ship_image_list)), (50, 50))
+		self.scale = 50
+		self.origimage = pygame.transform.scale(pygame.image.load(random.choice(ship_image_list)), (self.scale, self.scale))
 		self.image = self.origimage.copy()
 		self.startx = startpos[0]
 		self.starty = startpos[1]
@@ -109,6 +110,7 @@ class Player(pygame.sprite.Sprite):
 				self.dead = False
 				self.rect.center = (self.startx, self.starty)
 				self.hp = 100
+				self.fuel = 100
 				self.dir = self.startdir
 				self.speed = 0
 				self.invincible = True
@@ -127,17 +129,19 @@ class Player(pygame.sprite.Sprite):
 
 	def rotate_sprite(sprite, degrees):
 		"""Rotating the image and rect"""
+		surfsize = (sprite.thruster[0].get_width() + sprite.scale//2)*2
 		#get original center because new Rect center will change with image transformation.
 		oldCenter = sprite.rect.center
-		flamey_ship = pygame.Surface((200, 200))
+		flamey_ship = pygame.Surface((surfsize, surfsize))
 		ship_mask = flamey_ship.copy()
 		#pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
 		if sprite.thrusting:
-			flamey_ship.blit(sprite.thruster[sprite.nr], (27, 70))
+			flamey_ship.blit(sprite.thruster[sprite.nr], (surfsize//2-sprite.scale//2-sprite.thruster[0].get_width(), 
+														  surfsize//2-sprite.thruster[0].get_height()//2))
 		sprite.nr += 1
 		sprite.nr %= 30
-		flamey_ship.blit(sprite.origimage, (75,75))
-		ship_mask.blit(sprite.origimage, (75,75))
+		flamey_ship.blit(sprite.origimage, (surfsize//2-sprite.scale//2,surfsize//2-sprite.scale//2))
+		ship_mask.blit(sprite.origimage, (surfsize//2-sprite.scale//2,surfsize//2-sprite.scale//2))
 		if sprite.invincible:
 			flamey_ship.blit(sprite.shield[sprite.shieldnr], (29,35))
 		sprite.shieldnr += 1

@@ -16,7 +16,6 @@ class Asteroid(pygame.sprite.Sprite):
 		self.radius = (width//2)-17
 		self.nr = 0
 		
-
 	def respawn(self):
 		self.pos.x = random.randint(0, SCREENWIDTH)
 		self.pos.y = random.choice([i for j in (range(-200, 0), range(SCREENHEIGHT, SCREENHEIGHT + 200)) for i in j])
