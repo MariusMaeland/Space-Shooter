@@ -122,8 +122,10 @@ class Player(pygame.sprite.Sprite):
 					self.invincible_tick = 0
 			self.rotate_sprite(self.dir)
 			self.thrust()
+			
 			self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
 			self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
+			
 			# Makes the ship gradually loose speed when not thrusting.
 			self.speed = max(0, self.speed-0.2)
 

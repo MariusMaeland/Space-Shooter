@@ -132,8 +132,9 @@ class Game():
 		
 
 	def collisionchecks(self):
-		pygame.draw.line(self.screen, RED, (SCREENWIDTH//2, 0), (SCREENWIDTH//2, SCREENHEIGHT),1 )
-		pygame.draw.line(self.screen, RED, (0, SCREENHEIGHT//2), (SCREENWIDTH, SCREENHEIGHT//2), 1)
+		if DEBUG:
+			pygame.draw.line(self.screen, RED, (SCREENWIDTH//2, 0), (SCREENWIDTH//2, SCREENHEIGHT),1 )
+			pygame.draw.line(self.screen, RED, (0, SCREENHEIGHT//2), (SCREENWIDTH, SCREENHEIGHT//2), 1)
 		#-----------------------------------------------------------------------
 		#                    Player 2 gets hit or killed by player 1!
 		#-----------------------------------------------------------------------
@@ -240,8 +241,9 @@ class Game():
 			for rock in self.asteroid_group:
 				if rock is not asteroid:
 					if pygame.sprite.collide_rect(asteroid, rock):
-						pygame.draw.rect(self.screen, (255,0,0), asteroid.rect, 1)
-						pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
+						if DEBUG:
+							pygame.draw.rect(self.screen, (255,0,0), asteroid.rect, 1)
+							pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
 
 						point = pygame.sprite.collide_mask(asteroid, rock)
 						if point:

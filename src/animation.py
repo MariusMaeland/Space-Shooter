@@ -23,9 +23,11 @@ class Animation(pygame.sprite.Sprite):
 		
 
 	def update(self, screen, list):
-		pygame.draw.rect(screen, BLUE, self.rect, 1)
-		pygame.draw.circle(screen, RED, self.rect.center, 100, 1)
+		if DEBUG:
+			pygame.draw.rect(screen, BLUE, self.rect, 1)
+			pygame.draw.circle(screen, RED, self.rect.center, 100, 1)
 		self.image = self.animationlist[self.nr]
-		pygame.draw.circle(screen, YELLOW, self.rect.center, 110, 1)
+		if DEBUG:
+			pygame.draw.circle(screen, YELLOW, self.rect.center, 110, 1)
 		self.nr += 1
 		self.nr %= len(self.animationlist)
