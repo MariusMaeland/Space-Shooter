@@ -53,24 +53,20 @@ class Game():
 					self.asteroid_list.append(self.asteroid_image.subsurface(j*self.asw, i*self.asw, self.asw, self.asw))
 		
 		#-----------------------------------------------------------------------
-		#                    SETTING UP FUEL-SHEET
+		#                    SETTING UP FUEL, HEALTH and AMMO -SHEETS
 		#-----------------------------------------------------------------------
-		self.fuel_image = pygame.image.load("images/fuelsheet.png").convert_alpha()
-		self.fuel_list = []
-		self.fsw = 1340//10 # Divide by eight because there are eight images per row on the sheet. FSW = fuel sheet witdh.
-		for i in range(10):
-			for n in range(3):
-				self.fuel_list.append(self.fuel_image.subsurface(i*self.fsw, 0, self.fsw, 128))
+		def sheetcutter(filename):
+			cut_image = pygame.image.load(filename).convert_alpha()
+			listing = []
+			w = 1340//10 # Divide by eight because there are eight images per row on the sheet. FSW = fuel sheet witdh.
+			for i in range(10):
+				for n in range(3):
+					listing.append(cut_image.subsurface(i*w, 0, w, 128))
+			return listing
 
-		#-----------------------------------------------------------------------
-		#                    SETTING UP HEALTH-SHEET
-		#-----------------------------------------------------------------------
-		self.health_image = pygame.image.load("images/healthsheet.png").convert_alpha()
-		self.health_list = []
-		self.hsw = 1340//10 # Divide by eight because there are eight images per row on the sheet. HSW = health sheet witdh.
-		for i in range(10):
-			for n in range(3):
-				self.health_list.append(self.health_image.subsurface(i*self.hsw, 0, self.hsw, 128))
+		self.fuel_list = sheetcutter("images/fuelsheet.png")
+		self.health_list = sheetcutter("images/healthsheet.png")
+		self.ammo_list = sheetcutter("images/ammosheet.png")
 
 		self.dust_sheet = pygame.image.load("images/dust_sheet.png").convert_alpha()
 		self.dust_list = img_list(self.dust_sheet, 8, 3)
@@ -91,6 +87,7 @@ class Game():
 		self.fuel_group = pygame.sprite.Group()
 		self.asteroid_group = pygame.sprite.Group()
 		self.health_group = pygame.sprite.Group()
+		self.ammo_group = pygame.sprite.Group()
 
 		self.player1 = Player(P1STARTPOS, P1STARTANGLE)
 		self.player2 = Player(P2STARTPOS, P2STARTANGLE)
@@ -104,8 +101,8 @@ class Game():
 
 		for i in range(FUELNUM):
 			self.fuel = Animation(self.fuel_list, (random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
-													  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
-													   44, 42)
+												  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
+												   44, 42)
 			self.all_sprites_list.add(self.fuel)
 			self.fuel_group.add(self.fuel)
 
@@ -115,6 +112,13 @@ class Game():
 													   44, 42)
 			self.all_sprites_list.add(self.health)
 			self.health_group.add(self.health)
+
+		for i in range(AMMONUM):
+			self.ammo = Animation(self.ammo_list, (random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+												  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
+												   44, 42)
+			self.all_sprites_list.add(self.ammo)
+			self.health_group.add(self.ammo)
 
 		self.blackhole = Animation(self.hole_list, SCREENWIDTH//2, SCREENHEIGHT//2, 100, 100)
 		self.all_sprites_list.add(self.blackhole)
