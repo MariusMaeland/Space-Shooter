@@ -3,6 +3,7 @@ from bullet import Bullet
 import math
 import random
 from variables import *
+from precode import * 
 
 class Player(pygame.sprite.Sprite):
 
@@ -16,7 +17,9 @@ class Player(pygame.sprite.Sprite):
 		self.startx = startpos[0]
 		self.starty = startpos[1]
 		self.rect = self.image.get_rect()
-		self.rect.center = (self.startx, self.starty)
+		self.pos = Vector2D(self.startx, self.starty)
+		self.rect.centerx = self.pos.x
+		self.rect.centery = self.pos.y
 		# Load the image for the thruster-flame
 		self.thrusterimage = pygame.image.load("images/jetflame.png").convert_alpha()
 		self.shieldimage = pygame.image.load("images/shieldsheet.png").convert_alpha()
@@ -35,7 +38,7 @@ class Player(pygame.sprite.Sprite):
 		# Various attributes
 		self.startdir = start_angle
 		self.dir = start_angle
-		self.speed = 0
+		self.speed = Vector2D(0,0)
 		self.thrusting = False
 		# Various ammo-related stuff
 		self.ammo = 100
@@ -51,17 +54,25 @@ class Player(pygame.sprite.Sprite):
 
 		self.kills = 0
 		self.fuel = 100
+		self.vel = 0
+
+		self.direction = BLACKHOLEPOS-self.pos
 
 	def squish(self, deadpos):
-		self.rect.center = deadpos
+		self.pos.x = deadpos[0]
+		self.pos.y = deadpos[1]
+		self.rect.centerx = self.pos.x
+		self.rect.centery = self.pos.y
+		self.vel = 0
+		self.thrusting = False
 
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
 		if self.thrusting:
 			if self.fuel > 0:
 				# Makes the ship accelerate instead of instant getting top speed
-				self.fuel -= 0.1
-				self.speed = min(7, self.speed+1)
+				self.fuel -= 0.2
+				self.vel = min(7, self.vel+1)
 
 			self.thrusting = False
 
@@ -90,6 +101,7 @@ class Player(pygame.sprite.Sprite):
 					# Decrease the ammo count
 					self.ammo -= 1
 
+
 	def turnLeft(self):
 		"""Turns the ship to the left"""
 		# How many degrees the ship turns left.
@@ -108,11 +120,17 @@ class Player(pygame.sprite.Sprite):
 			if self.respawn_tick > (FPS * 3):
 				self.respawn_tick = 0
 				self.dead = False
-				self.rect.center = (self.startx, self.starty)
+				self.pos.x = self.startx 
+				self.pos.y = self.starty
+				self.rect.centerx = self.pos.x
+				self.rect.centery = self.pos.y
+				self.direction = BLACKHOLEPOS-self.pos
+				self.vel = 0
+				self.speed.x = 0
+				self.speed.y = 0
 				self.hp = 100
 				self.fuel = 100
 				self.dir = self.startdir
-				self.speed = 0
 				self.invincible = True
 		else:
 			if self.invincible:
@@ -122,12 +140,32 @@ class Player(pygame.sprite.Sprite):
 					self.invincible_tick = 0
 			self.rotate_sprite(self.dir)
 			self.thrust()
-			
-			self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
-			self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
-			
+
+			self.speed.x += math.cos(math.radians(self.dir)) * self.vel
+			self.speed.y -= math.sin(math.radians(self.dir)) * self.vel
 			# Makes the ship gradually loose speed when not thrusting.
-			self.speed = max(0, self.speed-0.2)
+			self.vel = max(0, self.vel-0.2)
+			
+			#self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
+			#self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
+			# Limit the speed-vector
+			if self.speed.magnitude() > PLAYERMAXSPEED:
+				self.speed = self.speed.normalized() * PLAYERMAXSPEED
+			else:
+				self.speed *= 0.5
+			self.pos += self.speed
+			
+			self.direction = BLACKHOLEPOS-self.pos
+			
+			self.speed += self.direction.normalized()*GRAVITY/self.direction.magnitude()
+			#print(self.pos)
+			
+			self.rect.centerx = self.pos.x
+			self.rect.centery = self.pos.y
+			#---------------------------------------------
+			#  				APPLYING GRAVITY
+			#---------------------------------------------
+
 
 	def rotate_sprite(sprite, degrees):
 		"""Rotating the image and rect"""

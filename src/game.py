@@ -18,7 +18,7 @@ class Game():
 		# Initialize pygame
 		pygame.init()
 		# Naming the display surface
-		self.screen = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT))
+		self.screen = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT), pygame.FULLSCREEN, 32)
 		# Setting the caption of window
 		pygame.display.set_caption(CAPTION, 'Space')
 		# Setting up sound
@@ -29,20 +29,7 @@ class Game():
 		# Loading font
 		self.font = pygame.font.SysFont('fonts/Roboto-Black.ttf', 25, False, False)
 
-
 	def setup(self):
-		# -------------------- 360 Controller Works --------------------------
-		print('Setting up joystick...')
-		self.joystick_count = pygame.joystick.get_count()
-		if self.joystick_count == 0:
-			print("Error, no joystick found!")
-		else:
-			for i in range(self.joystick_count):
-				self.joystick = pygame.joystick.Joystick(i)
-				self.joystick.init()
-				self.joystick_name = self.joystick.get_name()
-				print(self.joystick_name)
-		
 		#-----------------------------------------------------------------------
 		#                    SETTING UP EXPLOSION-SHEET
 		#-----------------------------------------------------------------------
@@ -53,8 +40,6 @@ class Game():
 			for j in range(9):
 				for n in range(2):
 					self.explosion_list.append(self.explosion_image.subsurface(j*self.esw, i*self.esw, self.esw, self.esw))
-
-		print(len(self.explosion_list))
 
 		#-----------------------------------------------------------------------
 		#                    SETTING UP ASTEROID-SHEET
@@ -233,12 +218,12 @@ class Game():
 		#-----------------------------------------------------------------------	
 		for crystal in self.health_group:
 			if pygame.sprite.collide_mask(crystal, self.player1):
-				self.player1.hp = min(100, self.player1.hp + crystal.amount)
+				self.player1.ammo = min(100, self.player1.ammo + crystal.amount)
 				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
 			if pygame.sprite.collide_mask(crystal, self.player2):
-			 	self.player2.hp = min(100, self.player2.hp + crystal.amount)
+			 	self.player2.ammo = min(100, self.player2.ammo + crystal.amount)
 			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 		#-----------------------------------------------------------------------
@@ -263,6 +248,15 @@ class Game():
 							#pygame.draw.lines(rock.image, (255, 255, 0), 1, outlineb)
 							collision = (asteroid.pos - rock.pos).normalized() * (-1)
 							asteroid.speed -= asteroid.speed.magnitude() * collision
+		#-----------------------------------------------------------------------
+		#		PLAYERS REACH EVENT HORIZON!
+		#-----------------------------------------------------------------------
+		if self.player1.direction.magnitude() < 25:
+			self.player1.dead = True 
+			self.player1.squish(P1DEADPOS)
+		if self.player2.direction.magnitude() < 25:
+			self.player2.dead = True
+			self.player2.squish(P2DEADPOS)
 
 	def eventhandler(self):
 		for event in pygame.event.get():
