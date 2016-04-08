@@ -276,7 +276,7 @@ class Game():
 		if self.pressed[pygame.K_UP]:
 			if self.player2.fuel > 0:
 				self.player2.thrusting = True
-		if self.pressed[pygame.K_KP0]:
+		if self.pressed[pygame.K_RCTRL]:
 			self.player2.fire(self.all_sprites_list, self.player2_bullets)
 
 		if self.pressed[pygame.K_d]:

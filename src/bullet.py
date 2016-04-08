@@ -16,7 +16,6 @@ class Bullet(pygame.sprite.Sprite):
 			self.bullet.append(self.image.subsurface((i*20, 0, 20, 20)))
 		self.yspeed = 0
 		self.xspeed = 0
-		self.dir = 0
 		self.nr = 0
 
 	def update(self, screen, all_sprites_list):
@@ -32,9 +31,6 @@ class Bullet(pygame.sprite.Sprite):
 			self.kill()
 		if(self.rect.centery < 0):
 			self.kill()
-
-	def draw(self, screen):
-		game.screen.blit(self.bullet[self.nr], (self.rect.centerx, self.rect.centery))
 
 	def animate_bullet(sprite, screen):
 		"""animating the image"""

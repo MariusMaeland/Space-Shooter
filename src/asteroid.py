@@ -48,6 +48,6 @@ class Asteroid(pygame.sprite.Sprite):
 		# Calculate new speed based on black hole pos
 		
 		direction = BLACKHOLEPOS-self.pos
-		self.speed += direction.normalized()*2/(direction.magnitude())
+		self.speed += direction.normalized()*4/(direction.magnitude())
 		#print(direction.normalized()*10/(direction.magnitude()))
 
