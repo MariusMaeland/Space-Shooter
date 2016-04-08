@@ -116,10 +116,14 @@ class Game():
 			self.asteroid = Asteroid(self.asteroid_list)
 			self.all_sprites_list.add(self.asteroid)
 			self.asteroid_group.add(self.asteroid)
+
 		for i in range(FUELNUM):
-			self.fuel = Fuel(self.fuel_list)
+			self.fuel = Animation(self.fuel_list, (random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+													  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
+													   44, 42)
 			self.all_sprites_list.add(self.fuel)
 			self.fuel_group.add(self.fuel)
+
 		for i in range(HEALTHNUM):
 			self.health = Animation(self.health_list, (random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 													  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
@@ -211,15 +215,18 @@ class Game():
 		#-----------------------------------------------------------------------
 		#      If the players are refueling their respective fuel tanks
 		#-----------------------------------------------------------------------	
-		for fuelthingy in self.fuel_group:
-			if pygame.sprite.collide_mask(fuelthingy, self.player1):
-				if self.player1.fuel < 100:
-				 	self.player1.fuel += 0.4
-				 	fuelthingy.amount -= 0.4
-			if pygame.sprite.collide_mask(fuelthingy, self.player2):
-			 	if self.player2.fuel < 100:
-				 	self.player2.fuel += 0.4
-				 	fuelthingy.amount -= 0.4
+	
+		for crystal in self.fuel_group:
+			if pygame.sprite.collide_mask(crystal, self.player1):
+				self.player1.fuel = min(100, self.player1.hp + crystal.amount)
+				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+
+			if pygame.sprite.collide_mask(crystal, self.player2):
+			 	self.player2.fuel = min(100, self.player2.fuel + crystal.amount)
+			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+		#-----------------------------------------------------------------------
 
 		#-----------------------------------------------------------------------
 		#      If the players get a healing-crystal
