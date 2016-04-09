@@ -21,18 +21,18 @@ class Player(pygame.sprite.Sprite):
 		self.rect.centerx = self.pos.x
 		self.rect.centery = self.pos.y
 		# Load the image for the thruster-flame
-		self.thrusterimage = pygame.image.load("images/jetflame.png").convert_alpha()
+		self.thrusterimage = pygame.image.load("images/jetflame2.png").convert_alpha()
 		self.shieldimage = pygame.image.load("images/shieldsheet.png").convert_alpha()
 		self.thruster = []
 		self.shield = []
 		 # Calculating how many pixels to cut each time from the sheet.
-		self.thruster_width = 1920//30
+		self.thruster_width = 64
 		# Sprite number from the thruster list.
 		self.nr = 0
 		self.shieldnr = 0
 		# Cut from the spritesheet and add them to the thruster-list.
-		for i in range(30):
-			self.thruster.append(self.thrusterimage.subsurface((i*self.thruster_width, 0, self.thruster_width, self.thruster_width)))
+		for i in range(21):
+			self.thruster.append(self.thrusterimage.subsurface((0, i*self.thruster_width+i*6, self.thruster_width*2, self.thruster_width)))
 		for x in range(18):
 			self.shield.append(self.shieldimage.subsurface((x*133, 0, 133, 133)))
 		# Various attributes
@@ -174,14 +174,16 @@ class Player(pygame.sprite.Sprite):
 		surfsize = (sprite.thruster[0].get_width() + sprite.scale//2)*2
 		#get original center because new Rect center will change with image transformation.
 		oldCenter = sprite.rect.center
-		flamey_ship = pygame.Surface((surfsize, surfsize))
+		flamey_ship = pygame.Surface((surfsize, surfsize), pygame.SRCALPHA, 32)
 		ship_mask = flamey_ship.copy()
+		flamey_ship.convert_alpha()
 		#pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
 		if sprite.thrusting:
-			flamey_ship.blit(sprite.thruster[sprite.nr], (surfsize//2-sprite.scale//2-sprite.thruster[0].get_width(), 
+			sprite.thruster[sprite.nr].convert_alpha()
+			flamey_ship.blit(sprite.thruster[sprite.nr], (surfsize//2-sprite.scale//2-sprite.thruster[0].get_width()+60, 
 														  surfsize//2-sprite.thruster[0].get_height()//2))
 		sprite.nr += 1
-		sprite.nr %= 30
+		sprite.nr %= 21
 		flamey_ship.blit(sprite.origimage, (surfsize//2-sprite.scale//2,surfsize//2-sprite.scale//2))
 		ship_mask.blit(sprite.origimage, (surfsize//2-sprite.scale//2,surfsize//2-sprite.scale//2))
 		if sprite.invincible:
@@ -189,11 +191,12 @@ class Player(pygame.sprite.Sprite):
 			pass
 		sprite.shieldnr += 1
 		sprite.shieldnr %= 18
-		flamey_ship.set_colorkey((0,0,0))
-		ship_mask.set_colorkey((0,0,0))
 		#use pygame.transform.rotate(<image_to_rotate>, <turn_degrees>)
 		sprite.image = pygame.transform.rotate(flamey_ship, degrees)
 		sprite.mask = pygame.mask.from_surface(pygame.transform.rotate(ship_mask, degrees))
+
+		flamey_ship.set_colorkey((0,0,0))
+		ship_mask.set_colorkey((0,0,0))
 		#outline = sprite.mask.outline()
 		#pygame.draw.lines(sprite.image, (255, 255, 0), 1, outline)
 		#get new Rect
