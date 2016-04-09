@@ -15,19 +15,26 @@ from functions import *
 class Game():
 	"""Initializes the game and handles user input, loading, pausing etc..."""
 	def __init__(self):
+		# Setting up the sound-mixer to avoid sound lag.
+		# This needs to be done BEFORE pygame.init!
+		pygame.mixer.pre_init(44100, -16, 2, 2048) 
 		# Initialize pygame
 		pygame.init()
 		# Naming the display surface
-		self.screen = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT), pygame.FULLSCREEN, 32)
+		self.screen = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT))
 		# Setting the caption of window
 		pygame.display.set_caption(CAPTION, 'Space')
 		# Setting up sound
 		pygame.mixer.init()
+
 		# ----------- VARIOUS LOADING --------------------
 		self.clock = pygame.time.Clock()
 		self.background = pygame.image.load("images/space.png")
 		# Loading font
 		self.font = pygame.font.SysFont('fonts/Roboto-Black.ttf', 25, False, False)
+		# Loading sounds
+		self.shot1 = pygame.mixer.Sound("sounds/rapidfire.ogg")
+		
 
 	def setup(self):
 		#-----------------------------------------------------------------------
@@ -89,8 +96,8 @@ class Game():
 		self.health_group = pygame.sprite.Group()
 		self.ammo_group = pygame.sprite.Group()
 
-		self.player1 = Player(P1STARTPOS, P1STARTANGLE)
-		self.player2 = Player(P2STARTPOS, P2STARTANGLE)
+		self.player1 = Player(P1STARTPOS, P1STARTANGLE, self.shot1)
+		self.player2 = Player(P2STARTPOS, P2STARTANGLE, self.shot1)
 		self.all_sprites_list.add(self.player1, self.player2)
 
 		for i in range(ASTEROIDSNUM):
@@ -286,6 +293,7 @@ class Game():
 				self.player2.thrusting = True
 		if self.pressed[pygame.K_RCTRL]:
 			self.player2.fire(self.all_sprites_list, self.player2_bullets)
+			self.player2.firing = True
 
 		if self.pressed[pygame.K_d]:
 			self.player1.turnRight()

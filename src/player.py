@@ -7,10 +7,11 @@ from precode import *
 
 class Player(pygame.sprite.Sprite):
 
-	def __init__(self, startpos, start_angle):
+	def __init__(self, startpos, start_angle, firingsound):
 		""" Constructor. Creates a player. """
 		super().__init__()
 		# Set the starting image
+		self.firesound = firingsound
 		self.scale = 50
 		self.origimage = pygame.transform.scale(pygame.image.load(random.choice(ship_image_list)), (self.scale, self.scale))
 		self.image = self.origimage.copy()
@@ -42,7 +43,7 @@ class Player(pygame.sprite.Sprite):
 		self.thrusting = False
 		# Various ammo-related stuff
 		self.ammo = 100
-	
+		self.firing = False
 		self.last_shot = 0
 		self.rate_of_fire = 200
 		# Health-problems
@@ -65,7 +66,6 @@ class Player(pygame.sprite.Sprite):
 		self.rect.centery = self.pos.y
 		self.vel = 0
 		self.thrusting = False
-		
 
 	def thrust(self):
 		"""Sets the thrust attribute to True and limits the speed"""
@@ -76,7 +76,6 @@ class Player(pygame.sprite.Sprite):
 				self.vel = min(7, self.vel+1)
 
 			self.thrusting = False
-
 
 	def fire(self, all_sprites_list, bullet_list):
 		"""Fires a shot, takes in all_sprites_list to get access to the group
@@ -101,7 +100,6 @@ class Player(pygame.sprite.Sprite):
 					self.last_shot = pygame.time.get_ticks()
 					# Decrease the ammo count
 					self.ammo -= 1
-
 
 	def turnLeft(self):
 		"""Turns the ship to the left"""
@@ -139,6 +137,10 @@ class Player(pygame.sprite.Sprite):
 				if self.invincible_tick > (FPS * 4):
 					self.invincible = False
 					self.invincible_tick = 0
+			print(self.firing)
+			if self.firing:
+				self.firesound.play()
+			self.firing = False
 			self.rotate_sprite(self.dir)
 
 			self.thrust()
