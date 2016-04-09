@@ -180,6 +180,7 @@ class Game():
 				self.player2.squish(P2DEADPOS)
 				self.player1.fuel = 100
 				self.player2.fuel = 100
+
 		#-----------------------------------------------------------------------
 		#                  If players crash in asteroids!
 		#-----------------------------------------------------------------------			
@@ -253,10 +254,6 @@ class Game():
 							#print(point)
 							dustexp = Explosion(self.dust_list, point[0]+asteroid.rect.x, point[1]+asteroid.rect.y, 50, 50)
 							self.all_sprites_list.add(dustexp)
-							#outlinea = asteroid.mask.outline()
-							#outlineb = rock.mask.outline()
-							#pygame.draw.lines(asteroid.image, (255, 255, 0), 1, outlinea)
-							#pygame.draw.lines(rock.image, (255, 255, 0), 1, outlineb)
 							collision = (asteroid.pos - rock.pos).normalized() * (-1)
 							asteroid.speed -= asteroid.speed.magnitude() * collision
 		#-----------------------------------------------------------------------
