@@ -176,8 +176,9 @@ class Player(pygame.sprite.Sprite):
 		oldCenter = sprite.rect.center
 		flamey_ship = pygame.Surface((surfsize, surfsize), pygame.SRCALPHA, 32)
 		ship_mask = flamey_ship.copy()
-		flamey_ship.convert_alpha()
-		#pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
+		if DEBUG:
+			pygame.draw.rect(flamey_ship, (255,0,0), flamey_ship.get_rect(), 1)
+	
 		if sprite.thrusting:
 			sprite.thruster[sprite.nr].convert_alpha()
 			flamey_ship.blit(sprite.thruster[sprite.nr], (surfsize//2-sprite.scale//2-sprite.thruster[0].get_width()+60, 
@@ -194,11 +195,9 @@ class Player(pygame.sprite.Sprite):
 		#use pygame.transform.rotate(<image_to_rotate>, <turn_degrees>)
 		sprite.image = pygame.transform.rotate(flamey_ship, degrees)
 		sprite.mask = pygame.mask.from_surface(pygame.transform.rotate(ship_mask, degrees))
-
-		flamey_ship.set_colorkey((0,0,0))
-		ship_mask.set_colorkey((0,0,0))
-		#outline = sprite.mask.outline()
-		#pygame.draw.lines(sprite.image, (255, 255, 0), 1, outline)
+		if DEBUG:
+			outline = sprite.mask.outline()
+			pygame.draw.lines(sprite.image, (255, 255, 0), 1, outline)
 		#get new Rect
 		sprite.rect = sprite.image.get_rect()
 		#set new center to original center

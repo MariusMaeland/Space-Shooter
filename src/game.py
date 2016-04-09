@@ -184,23 +184,30 @@ class Game():
 		#                  If players crash in asteroids!
 		#-----------------------------------------------------------------------			
 		for rock in self.asteroid_group:
-			if pygame.sprite.collide_mask(self.player1, rock):
-				self.player1.hp = 0 
-				self.player1.dead = True 
-				self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
-				self.all_sprites_list.add(self.supadeath)
-				self.player1.squish(P1DEADPOS)
-				self.player1.fuel = 100
-				rock.respawn()
-
-			if pygame.sprite.collide_mask(self.player2, rock):
-				self.player2.hp = 0
-				self.player2.dead = True
-				self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
-				self.all_sprites_list.add(self.supadeath)
-				self.player2.squish(P2DEADPOS)
-				self.player2.fuel = 100
-				rock.respawn()
+			if pygame.sprite.collide_rect(self.player1, rock):
+				if DEBUG:
+					pygame.draw.rect(self.screen, (255,0,0), self.player1.rect, 1)
+					pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
+				if pygame.sprite.collide_mask(self.player1, rock):
+					self.player1.hp = 0 
+					self.player1.dead = True 
+					self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
+					self.all_sprites_list.add(self.supadeath)
+					self.player1.squish(P1DEADPOS)
+					self.player1.fuel = 100
+					rock.respawn()
+			if pygame.sprite.collide_rect(self.player2, rock):
+				if DEBUG:
+					pygame.draw.rect(self.screen, (255,0,0), self.player2.rect, 1)
+					pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
+				if pygame.sprite.collide_mask(self.player2, rock):
+					self.player2.hp = 0
+					self.player2.dead = True
+					self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
+					self.all_sprites_list.add(self.supadeath)
+					self.player2.squish(P2DEADPOS)
+					self.player2.fuel = 100
+					rock.respawn()
 		#-----------------------------------------------------------------------
 		#      If the players are refueling their respective fuel tanks
 		#-----------------------------------------------------------------------	
