@@ -125,7 +125,7 @@ class Game():
 												  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
 												   44, 42)
 			self.all_sprites_list.add(self.ammo)
-			self.health_group.add(self.ammo)
+			self.ammo_group.add(self.ammo)
 
 		self.blackhole = Animation(self.hole_list, SCREENWIDTH//2, SCREENHEIGHT//2, 100, 100)
 		self.all_sprites_list.add(self.blackhole)
@@ -177,16 +177,30 @@ class Game():
 			if (self.player1.dead or self.player2.dead):
 				pass
 			else:
-				self.player1.hp = 0 
-				self.player2.hp = 0
-				self.player1.dead = True 
-				self.player2.dead = True
-				self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
-				self.all_sprites_list.add(self.supadeath)
-				self.player1.squish(P1DEADPOS)
-				self.player2.squish(P2DEADPOS)
-				self.player1.fuel = 100
-				self.player2.fuel = 100
+				p1dir = (self.player1.pos - self.player2.pos)
+				self.player1.speed += p1dir
+				
+				p2dir = (self.player2.pos - self.player1.pos)
+				self.player2.speed += p2dir
+
+				self.player1.hp -= 10 
+				self.player2.hp -= 10
+				if self.player1.hp == 0:
+					self.player1.dead = True
+					self.player1.squish(P1DEADPOS)
+					self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
+					self.all_sprites_list.add(self.supadeath)
+					self.player1.fuel = 100
+
+
+				if self.player2.hp == 0: 
+					self.player2.dead = True
+					self.player2.squish(P2DEADPOS)
+					self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
+					self.all_sprites_list.add(self.supadeath)
+					self.player2.fuel = 100
+				
+				
 
 		#-----------------------------------------------------------------------
 		#                  If players crash in asteroids!
@@ -196,38 +210,63 @@ class Game():
 				if DEBUG:
 					pygame.draw.rect(self.screen, (255,0,0), self.player1.rect, 1)
 					pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
-				if pygame.sprite.collide_mask(self.player1, rock):
-					self.player1.hp = 0 
-					self.player1.dead = True 
-					self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
-					self.all_sprites_list.add(self.supadeath)
-					self.player1.squish(P1DEADPOS)
-					self.player1.fuel = 100
-					rock.respawn()
+
+				point = pygame.sprite.collide_mask(self.player1, rock)
+				if point:
+					self.player1.hp -= 20
+					if self.player1.hp == 0: 
+						self.player1.dead = True 
+						self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
+						self.all_sprites_list.add(self.supadeath)
+						self.player1.squish(P1DEADPOS)
+						self.player1.fuel = 100
+						rock.respawn()
+					dustexp = Explosion(self.dust_list, point[0]+self.player1.rect.x, point[1]+self.player1.rect.y, 50, 50)
+					self.all_sprites_list.add(dustexp)
+
+					pdir = (self.player1.pos - rock.pos)
+					self.player1.speed += pdir
+					
+					adir = (rock.pos - self.player1.pos)
+					rock.speed += adir	
+
 			if pygame.sprite.collide_rect(self.player2, rock):
 				if DEBUG:
 					pygame.draw.rect(self.screen, (255,0,0), self.player2.rect, 1)
 					pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
-				if pygame.sprite.collide_mask(self.player2, rock):
-					self.player2.hp = 0
-					self.player2.dead = True
-					self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
-					self.all_sprites_list.add(self.supadeath)
-					self.player2.squish(P2DEADPOS)
-					self.player2.fuel = 100
-					rock.respawn()
+				point = pygame.sprite.collide_mask(self.player2, rock)
+				if point:
+					self.player2.hp -= 20
+					if self.player2.hp == 0:
+						self.player2.dead = True
+						self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
+						self.all_sprites_list.add(self.supadeath)
+						self.player2.squish(P2DEADPOS)
+						self.player2.fuel = 100
+						rock.respawn()
+					dustexp = Explosion(self.dust_list, point[0]+self.player2.rect.x, point[1]+self.player2.rect.y, 50, 50)
+					self.all_sprites_list.add(dustexp)
+
+					pdir = (self.player2.pos - rock.pos)
+					self.player2.speed += pdir
+				
+					adir = (rock.pos - self.player2.pos)
+					rock.speed += adir
+
+		
+
 		#-----------------------------------------------------------------------
 		#      If the players are refueling their respective fuel tanks
 		#-----------------------------------------------------------------------	
 	
 		for crystal in self.fuel_group:
 			if pygame.sprite.collide_mask(crystal, self.player1):
-				self.player1.fuel = min(100, self.player1.hp + crystal.amount)
+				self.player1.fuel = min(100, self.player1.hp + crystal.fuelamount)
 				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
 			if pygame.sprite.collide_mask(crystal, self.player2):
-			 	self.player2.fuel = min(100, self.player2.fuel + crystal.amount)
+			 	self.player2.fuel = min(100, self.player2.fuel + crystal.fuelamount)
 			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 		#-----------------------------------------------------------------------
@@ -237,12 +276,26 @@ class Game():
 		#-----------------------------------------------------------------------	
 		for crystal in self.health_group:
 			if pygame.sprite.collide_mask(crystal, self.player1):
-				self.player1.ammo = min(100, self.player1.ammo + crystal.amount)
+				self.player1.hp = min(100, self.player1.hp + crystal.hpamount)
 				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
 			if pygame.sprite.collide_mask(crystal, self.player2):
-			 	self.player2.ammo = min(100, self.player2.ammo + crystal.amount)
+			 	self.player2.hp = min(100, self.player2.hp + crystal.hpamount)
+			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+
+		#--------------------------------------------------------a---------------
+		#      If the players get a ammo-crystal
+		#-----------------------------------------------------------------------	
+		for crystal in self.ammo_group:
+			if pygame.sprite.collide_mask(crystal, self.player1):
+				self.player1.ammo = min(100, self.player1.ammo + crystal.ammoamount)
+				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+
+			if pygame.sprite.collide_mask(crystal, self.player2):
+			 	self.player2.ammo = min(100, self.player2.ammo + crystal.ammoamount)
 			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 		#-----------------------------------------------------------------------
@@ -271,6 +324,8 @@ class Game():
 			for bullet in self.player1_bullets:
 				if pygame.sprite.collide_mask(asteroid, bullet):
 					self.asteroid.hp -= 1
+					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
+					self.all_sprites_list.add(self.hitpointexp)
 					if self.asteroid.hp == 0:
 						self.supadeath = Explosion(self.explosion_list, asteroid.pos.x, asteroid.pos.y, 300, 300)
 						self.all_sprites_list.add(self.supadeath)
@@ -281,6 +336,8 @@ class Game():
 				for bullet in self.player2_bullets:
 					if pygame.sprite.collide_mask(asteroid, bullet):
 						self.asteroid.hp -= 1
+						self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
+						self.all_sprites_list.add(self.hitpointexp)
 						if self.asteroid.hp == 0:
 							self.supadeath = Explosion(self.explosion_list, asteroid.pos.x, asteroid.pos.y, 300, 300)
 							self.all_sprites_list.add(self.supadeath)

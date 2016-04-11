@@ -35,9 +35,8 @@ class Asteroid(pygame.sprite.Sprite):
 				self.respawn()
 		
 		# Move to the next image in the animation
-		self.image = pygame.transform.scale(self.astlist[self.nr], (self.width, self.height))
-		self.nr += 1
-		self.nr %= 96
+		self.animate()
+	
 		
 		# Move the rect to the vectors position
 		self.rect.centerx = self.pos.x
@@ -49,9 +48,14 @@ class Asteroid(pygame.sprite.Sprite):
 		if self.speed.magnitude() < ASTEROIDSMINSPEED:
 			self.speed = self.speed.normalized() * ASTEROIDSMINSPEED
 		self.pos += self.speed
-		# Calculate new speed based on black hole pos
 		
+		self.gravitation()
+
+	def gravitation(self):
 		direction = BLACKHOLEPOS-self.pos
 		self.speed += direction.normalized()*4/(direction.magnitude())
-		#print(direction.normalized()*10/(direction.magnitude()))
 
+	def animate(self):
+		self.image = pygame.transform.scale(self.astlist[self.nr], (self.width, self.height))
+		self.nr += 1
+		self.nr %= 96

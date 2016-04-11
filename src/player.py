@@ -72,7 +72,7 @@ class Player(pygame.sprite.Sprite):
 		if self.thrusting:
 			if self.fuel > 0:
 				# Makes the ship accelerate instead of instant getting top speed
-				self.fuel -= 0.2
+				self.fuel -= 0.1
 				self.vel = min(7, self.vel+1)
 
 			self.thrusting = False
@@ -92,8 +92,8 @@ class Player(pygame.sprite.Sprite):
 					bullet.rect.centerx = self.rect.centerx
 					bullet.rect.centery = self.rect.centery
 					# Calculate vectors:
-					bullet.xspeed = math.cos(math.radians(self.dir)) * 10
-					bullet.yspeed = math.sin(math.radians(self.dir)) * -10
+					bullet.xspeed = math.cos(math.radians(self.dir)) * 15
+					bullet.yspeed = math.sin(math.radians(self.dir)) * -15
 		        	# Add the bullets to the lists
 					all_sprites_list.add(bullet)
 					bullet_list.add(bullet)
@@ -113,24 +113,28 @@ class Player(pygame.sprite.Sprite):
 		self.dir -= 4
 		self.dir %= 360
 
+	def respawn(self):
+		"""If the player die it spawns with full hp and fuel"""
+		self.respawn_tick += 1
+		if self.respawn_tick > (FPS * 3):
+			self.respawn_tick = 0
+			self.dead = False
+			self.pos.x = self.startx 
+			self.pos.y = self.starty
+			self.rect.centerx = self.pos.x
+			self.rect.centery = self.pos.y
+			self.direction = BLACKHOLEPOS-self.pos
+			self.vel = 0
+			self.speed.x = 0
+			self.speed.y = 0
+			self.hp = 100
+			self.fuel = 100
+			self.dir = self.startdir
+			self.invincible = True
+
 	def update(self, screen, all_sprites_list):
 		if self.dead:
-			self.respawn_tick += 1
-			if self.respawn_tick > (FPS * 3):
-				self.respawn_tick = 0
-				self.dead = False
-				self.pos.x = self.startx 
-				self.pos.y = self.starty
-				self.rect.centerx = self.pos.x
-				self.rect.centery = self.pos.y
-				self.direction = BLACKHOLEPOS-self.pos
-				self.vel = 0
-				self.speed.x = 0
-				self.speed.y = 0
-				self.hp = 100
-				self.fuel = 100
-				self.dir = self.startdir
-				self.invincible = True
+			self.respawn()
 		else:
 			if self.invincible:
 				self.invincible_tick += 1
@@ -159,17 +163,15 @@ class Player(pygame.sprite.Sprite):
 				self.speed *= 0.5
 			self.pos += self.speed
 			
-			self.direction = BLACKHOLEPOS-self.pos
-			
-			self.speed += self.direction.normalized()*GRAVITY/self.direction.magnitude()
-			#print(self.pos)
-			
-			self.rect.centerx = self.pos.x
-			self.rect.centery = self.pos.y
-			#---------------------------------------------
-			#  				APPLYING GRAVITY
-			#---------------------------------------------
+			self.gravitation()
 
+	def gravitation(self):
+		self.direction = BLACKHOLEPOS-self.pos
+			
+		self.pos += self.direction.normalized()*GRAVITY/self.direction.magnitude()
+		
+		self.rect.centerx = self.pos.x
+		self.rect.centery = self.pos.y
 
 	def rotate_sprite(sprite, degrees):
 		"""Rotating the image and rect"""

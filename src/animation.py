@@ -5,7 +5,7 @@ from variables import *
 class Animation(pygame.sprite.Sprite):
 
 	def __init__(self, animationlist, x, y, width = 100, height = 100):
-		""" Constructor. Creates a health-crystal. """
+		""" Constructor. Creates fuel, and ammo crystals. """
 		super().__init__()
 		self.animationlist = animationlist.copy()
 		self.image = self.animationlist[0]
@@ -14,15 +14,19 @@ class Animation(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.respawn(x, y)
 		self.nr = 0
-		self.amount = random.randint(10,60)
+		self.fuelamount = random.randint(30,60)
+		self.hpamount = random.randint(10,60)
+		self.ammoamount = 20
 
 	def respawn(self, x, y):
+		"""makes the crystals respawn at random location after picked up"""
 		self.rect.centerx = x
 		self.rect.centery = y
 		print(self.rect.center)
 		
 
 	def update(self, screen, list):
+		"""updates and animates the sprites"""
 		if DEBUG:
 			pygame.draw.rect(screen, BLUE, self.rect, 1)
 			pygame.draw.circle(screen, RED, self.rect.center, 100, 1)
