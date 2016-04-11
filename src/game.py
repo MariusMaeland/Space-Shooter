@@ -263,6 +263,30 @@ class Game():
 							self.all_sprites_list.add(dustexp)
 							collision = (asteroid.pos - rock.pos).normalized() * (-1)
 							asteroid.speed -= asteroid.speed.magnitude() * collision
+
+		#-----------------------------------------------------------------------
+		#      If asteroids gets shot
+		#-----------------------------------------------------------------------
+		for asteroid in self.asteroid_group:
+			for bullet in self.player1_bullets:
+				if pygame.sprite.collide_mask(asteroid, bullet):
+					self.asteroid.hp -= 1
+					if self.asteroid.hp == 0:
+						self.supadeath = Explosion(self.explosion_list, asteroid.pos.x, asteroid.pos.y, 300, 300)
+						self.all_sprites_list.add(self.supadeath)
+						asteroid.respawn()
+					bullet.kill()
+
+			for asteroid in self.asteroid_group:
+				for bullet in self.player2_bullets:
+					if pygame.sprite.collide_mask(asteroid, bullet):
+						self.asteroid.hp -= 1
+						if self.asteroid.hp == 0:
+							self.supadeath = Explosion(self.explosion_list, asteroid.pos.x, asteroid.pos.y, 300, 300)
+							self.all_sprites_list.add(self.supadeath)
+							asteroid.respawn()
+						bullet.kill()
+
 		#-----------------------------------------------------------------------
 		#		PLAYERS REACH EVENT HORIZON!
 		#-----------------------------------------------------------------------
