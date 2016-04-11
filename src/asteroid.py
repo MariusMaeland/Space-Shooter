@@ -18,12 +18,14 @@ class Asteroid(pygame.sprite.Sprite):
 		self.hp = 3
 		
 	def respawn(self):
+		"""Moves the asteroid outside the screen, giving it new startpos and speed"""
 		self.pos.x = random.randint(0, SCREENWIDTH)
 		self.pos.y = random.choice([i for j in (range(-200, 0), range(SCREENHEIGHT, SCREENHEIGHT + 200)) for i in j])
 		self.speed.x = random.randint(-3, 3)
 		self.speed.y = random.randint(2, 3) if self.rect.y < 0 else random.randint(-3, -2)
 		self.hp = 3
 	def update(self, screen, list):
+		"""Updating the position to the asteroid and handling speed limit"""
 		# Check if the asteroids fly off the screen
 		if self.speed.y > 0:
 			if self.rect.top > SCREENHEIGHT:
