@@ -1,11 +1,10 @@
 import pygame
-from variables import *
+from config import *
 
 class Bullet(pygame.sprite.Sprite):
 	"""Constructor, creates a bullet fired by one of the two players."""
 	def __init__(self):
-		""" Constructor. Creates a bullet. Takes a
-		preloaded image as imagetype. """
+		""" Constructor. Creates a bullet. """
 		super().__init__()
 		self.origimage = pygame.image.load("images/bullet.png").convert_alpha()
 		self.image = self.origimage.copy()

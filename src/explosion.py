@@ -1,10 +1,11 @@
 import pygame
-from variables import *
+from config import *
 
 class Explosion(pygame.sprite.Sprite):
-
+	"""Animates an explosion"""
 	def __init__(self, explosionlist, x, y, width = 100, height = 100):
-		""" Constructor. Creates an explosion. """
+		""" Constructor. Creates an explosion. 
+			Takes in list of sprites, position and scale."""
 		super().__init__()
 		self.explist = explosionlist
 		self.image = self.explist[0]
@@ -16,6 +17,7 @@ class Explosion(pygame.sprite.Sprite):
 		self.nr = 0
 
 	def update(self, screen, list):
+		"""Iterates through animation list and removes it self when done."""
 		if self.nr < len(self.explist):
 			self.image = pygame.transform.scale(self.explist[self.nr], (self.width, self.height))
 			self.nr += 1

@@ -2,50 +2,56 @@
 import pygame
 import random
 import math
-from variables import *
+from config import *
 from bullet import Bullet
 from player import Player
 from asteroid import Asteroid
 from explosion import Explosion
-from fuel import Fuel
 from animation import Animation
 from precode import *
 from functions import *
 
+"""
+Space Shooter Game
+Made by:
+Marius Mæland and Raymon Skjørten Hansen
+
+Thanks to all the makers of the awesome sprites we have used!
+See: references.txt 
+"""
+
 class Game():
-	"""Initializes the game and handles user input, loading, pausing etc..."""
+	"""Initializes the game and handles setting up the game,
+	user input, collision-checks and prints player info on the screen."""
 	def __init__(self):
-		# Setting up the sound-mixer to avoid sound lag.
-		# This needs to be done BEFORE pygame.init!
-		pygame.mixer.pre_init(44100, -16, 2, 2048) 
 		# Initialize pygame
 		pygame.init()
 		# Naming the display surface
 		self.screen = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT))
 		# Setting the caption of window
 		pygame.display.set_caption(CAPTION, 'Space')
-		# Setting up sound
-		pygame.mixer.init()
 
 		# ----------- VARIOUS LOADING --------------------
 		self.clock = pygame.time.Clock()
 		self.background = pygame.image.load("images/space.png")
 		# Loading font
 		self.font = pygame.font.SysFont('fonts/Roboto-Black.ttf', 25, False, False)
-		# Loading sounds
-		self.shot1 = pygame.mixer.Sound("sounds/rapidfire.ogg")
-		
 
 	def setup(self):
+		"""Loads and cuts all the sprite sheets.
+		Makes all instances of the needed objects and puts them in their 
+		respective groups and lists
+
+		Calling this method will effectively reset the game to it's initial state"""
 		#-----------------------------------------------------------------------
 		#                    SETTING UP EXPLOSION-SHEET
 		#-----------------------------------------------------------------------
 		self.explosion_image = pygame.image.load("images/exp2.png").convert_alpha()
 		self.explosion_list = []
-		self.esw = 900//9 # Divide by eight because there are eight images per row on the sheet. ESW = explosion sheet witdh.
-		for i in range(9): # Because there are 8 rows of images on the sheet 
+		self.esw = 900//9 # Finds the with of each frame used in the animation. esw = explosion sheet width
+		for i in range(9): # Because there are 9 rows of images on the sheet
 			for j in range(9):
-				for n in range(2):
+				for n in range(2): # Add each of them frames twice to lengthen the animation.
 					self.explosion_list.append(self.explosion_image.subsurface(j*self.esw, i*self.esw, self.esw, self.esw))
 
 		#-----------------------------------------------------------------------
@@ -54,18 +60,19 @@ class Game():
 		self.asteroid_image = pygame.image.load("images/asteroids.png").convert_alpha()
 		self.asteroid_list = []
 		self.asw = 1024//8 # Divide by eight because there are eight images per row on the sheet. ESW = explosion sheet witdh.
-		for i in range(4): # Because there are 8 rows of images on the sheet 
+		for i in range(4): # Because there are 4 rows of images on the sheet 
 			for j in range(8):
-				for n in range(3):
+				for n in range(3): # Add each frame 3 times to slow down the rotation
 					self.asteroid_list.append(self.asteroid_image.subsurface(j*self.asw, i*self.asw, self.asw, self.asw))
 		
 		#-----------------------------------------------------------------------
 		#                    SETTING UP FUEL, HEALTH and AMMO -SHEETS
 		#-----------------------------------------------------------------------
 		def sheetcutter(filename):
+			"""Small function that cuts from the same sprite sheet."""
 			cut_image = pygame.image.load(filename).convert_alpha()
 			listing = []
-			w = 1340//10 # Divide by eight because there are eight images per row on the sheet. FSW = fuel sheet witdh.
+			w = 1340//10
 			for i in range(10):
 				for n in range(3):
 					listing.append(cut_image.subsurface(i*w, 0, w, 128))
@@ -75,9 +82,18 @@ class Game():
 		self.health_list = sheetcutter("images/healthsheet.png")
 		self.ammo_list = sheetcutter("images/ammosheet.png")
 
+		#------------------------------------------------------------------------
+		# 					SETTING UP DUST EXPLOSION
+		#------------------------------------------------------------------------
 		self.dust_sheet = pygame.image.load("images/dust_sheet.png").convert_alpha()
+		# Uses a generic sprite sheet function
 		self.dust_list = img_list(self.dust_sheet, 8, 3)
 
+		#------------------------------------------------------------------------
+		# 					SETTING UP GREEN HOLE
+		#------------------------------------------------------------------------
+		# Does not use the generic sprite sheet function, because it doesn't handle 
+		# blank space between each frame in the sheet.
 		self.hole_sheet = pygame.image.load("images/greenhole_sheet.png").convert_alpha()
 		self.hole_list = []
 		self.smbh = (self.hole_sheet.get_width()-90)//15
@@ -88,24 +104,30 @@ class Game():
 		#-----------------------------------------------------------------------
 		#                    SETTING UP SPRITEGROUPS
 		#-----------------------------------------------------------------------
+		# One group to rule them all!!!
 		self.all_sprites_list = pygame.sprite.Group()
+		# One for each of the players bullets
 		self.player1_bullets = pygame.sprite.Group()
 		self.player2_bullets = pygame.sprite.Group()
+		# One for each of the other elements in the game.
 		self.fuel_group = pygame.sprite.Group()
 		self.asteroid_group = pygame.sprite.Group()
 		self.health_group = pygame.sprite.Group()
 		self.ammo_group = pygame.sprite.Group()
 
-		self.player1 = Player(P1STARTPOS, P1STARTANGLE, self.shot1)
-		self.player2 = Player(P2STARTPOS, P2STARTANGLE, self.shot1)
+		# Initializes the two players
+		self.player1 = Player(P1STARTPOS, P1STARTANGLE)
+		self.player2 = Player(P2STARTPOS, P2STARTANGLE)
 		self.all_sprites_list.add(self.player1, self.player2)
 
+		# Initializes the asteroids
 		for i in range(ASTEROIDSNUM):
-			#size = random.randint(30, 150)
-			self.asteroid = Asteroid(self.asteroid_list)
+			size = random.randint(50, 100)
+			self.asteroid = Asteroid(self.asteroid_list, size, size)
 			self.all_sprites_list.add(self.asteroid)
 			self.asteroid_group.add(self.asteroid)
 
+		# Initalizes the fuel crystal
 		for i in range(FUELNUM):
 			self.fuel = Animation(self.fuel_list, (random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 												  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
@@ -113,6 +135,7 @@ class Game():
 			self.all_sprites_list.add(self.fuel)
 			self.fuel_group.add(self.fuel)
 
+		# Initializes the health crystal
 		for i in range(HEALTHNUM):
 			self.health = Animation(self.health_list, (random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 													  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
@@ -120,6 +143,7 @@ class Game():
 			self.all_sprites_list.add(self.health)
 			self.health_group.add(self.health)
 
+		# Initializes the ammo crystal
 		for i in range(AMMONUM):
 			self.ammo = Animation(self.ammo_list, (random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 												  (random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))),
@@ -127,11 +151,13 @@ class Game():
 			self.all_sprites_list.add(self.ammo)
 			self.ammo_group.add(self.ammo)
 
+		# Initalizes the green gravity hole
 		self.blackhole = Animation(self.hole_list, SCREENWIDTH//2, SCREENHEIGHT//2, 100, 100)
 		self.all_sprites_list.add(self.blackhole)
 		
 
 	def collisionchecks(self):
+		"""Collision handler to handle all of the collision checks"""
 		if DEBUG:
 			pygame.draw.line(self.screen, RED, (SCREENWIDTH//2, 0), (SCREENWIDTH//2, SCREENHEIGHT),1 )
 			pygame.draw.line(self.screen, RED, (0, SCREENHEIGHT//2), (SCREENWIDTH, SCREENHEIGHT//2), 1)
@@ -140,7 +166,9 @@ class Game():
 		#-----------------------------------------------------------------------
 		for bullet in self.player1_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player2):
-				if self.player2.hp > 0:
+				if self.player2.invincible:
+					pass
+				elif self.player2.hp > 0:
 					self.player2.hp -= 10
 					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
 					self.all_sprites_list.add(self.hitpointexp)
@@ -157,7 +185,9 @@ class Game():
 		#-----------------------------------------------------------------------
 		for bullet in self.player2_bullets:
 			if pygame.sprite.collide_mask(bullet, self.player1):
-				if self.player1.hp > 0:
+				if self.player1.invincible:
+					pass
+				elif self.player1.hp > 0:
 					self.player1.hp -= 10
 					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
 					self.all_sprites_list.add(self.hitpointexp)
@@ -175,6 +205,8 @@ class Game():
 		#-----------------------------------------------------------------------	
 		if pygame.sprite.collide_mask(self.player1, self.player2):
 			if (self.player1.dead or self.player2.dead):
+				pass
+			if (self.player1.invincible or self.player2.invincible):
 				pass
 			else:
 				p1dir = (self.player1.pos - self.player2.pos)
@@ -198,14 +230,15 @@ class Game():
 					self.supadeath2 = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
 					self.all_sprites_list.add(self.supadeath2)
 					self.player2.squish(P2DEADPOS)
-					print(self.supadeath2)
 					self.player2.fuel = 100
 				
 				
 
 		#-----------------------------------------------------------------------
 		#                  If players crash in asteroids!
-		#-----------------------------------------------------------------------			
+		#-----------------------------------------------------------------------		
+
+		# Player 1	
 		for rock in self.asteroid_group:
 			if pygame.sprite.collide_rect(self.player1, rock):
 				if DEBUG:
@@ -214,14 +247,17 @@ class Game():
 
 				point = pygame.sprite.collide_mask(self.player1, rock)
 				if point:
-					self.player1.hp -= 20
-					if self.player1.hp == 0: 
-						self.player1.dead = True 
-						self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
-						self.all_sprites_list.add(self.supadeath)
-						self.player1.squish(P1DEADPOS)
-						self.player1.fuel = 100
-						rock.respawn()
+					if self.player1.invincible:
+						pass
+					else:
+						self.player1.hp -= 20
+						if self.player1.hp <= 0: 
+							self.player1.dead = True 
+							self.supadeath = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
+							self.all_sprites_list.add(self.supadeath)
+							self.player1.squish(P1DEADPOS)
+							self.player1.fuel = 100
+							rock.respawn()
 					dustexp = Explosion(self.dust_list, point[0]+self.player1.rect.x, point[1]+self.player1.rect.y, 50, 50)
 					self.all_sprites_list.add(dustexp)
 
@@ -231,20 +267,24 @@ class Game():
 					adir = (rock.pos - self.player1.pos)
 					rock.speed += adir	
 
+			# Player 2
 			if pygame.sprite.collide_rect(self.player2, rock):
 				if DEBUG:
 					pygame.draw.rect(self.screen, (255,0,0), self.player2.rect, 1)
 					pygame.draw.rect(self.screen, (255,0,255), rock.rect, 1)
 				point = pygame.sprite.collide_mask(self.player2, rock)
 				if point:
-					self.player2.hp -= 20
-					if self.player2.hp == 0:
-						self.player2.dead = True
-						self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
-						self.all_sprites_list.add(self.supadeath)
-						self.player2.squish(P2DEADPOS)
-						self.player2.fuel = 100
-						rock.respawn()
+					if self.player2.invincible:
+						pass
+					else:
+						self.player2.hp -= 20
+						if self.player2.hp <= 0:
+							self.player2.dead = True
+							self.supadeath = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
+							self.all_sprites_list.add(self.supadeath)
+							self.player2.squish(P2DEADPOS)
+							self.player2.fuel = 100
+							rock.respawn()
 					dustexp = Explosion(self.dust_list, point[0]+self.player2.rect.x, point[1]+self.player2.rect.y, 50, 50)
 					self.all_sprites_list.add(dustexp)
 
@@ -257,30 +297,34 @@ class Game():
 		
 
 		#-----------------------------------------------------------------------
-		#      If the players are refueling their respective fuel tanks
+		#      If the players get a fuel-crystal
 		#-----------------------------------------------------------------------	
-	
+		
 		for crystal in self.fuel_group:
+			# Player 1
 			if pygame.sprite.collide_mask(crystal, self.player1):
 				self.player1.fuel = min(100, self.player1.hp + crystal.fuelamount)
 				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
+			# Player 2
 			if pygame.sprite.collide_mask(crystal, self.player2):
 			 	self.player2.fuel = min(100, self.player2.fuel + crystal.fuelamount)
 			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
-		#-----------------------------------------------------------------------
-
+		
 		#-----------------------------------------------------------------------
 		#      If the players get a healing-crystal
 		#-----------------------------------------------------------------------	
+		
 		for crystal in self.health_group:
+			# Player 1
 			if pygame.sprite.collide_mask(crystal, self.player1):
 				self.player1.hp = min(100, self.player1.hp + crystal.hpamount)
 				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
+			# Player 2
 			if pygame.sprite.collide_mask(crystal, self.player2):
 			 	self.player2.hp = min(100, self.player2.hp + crystal.hpamount)
 			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
@@ -289,12 +333,15 @@ class Game():
 		#--------------------------------------------------------a---------------
 		#      If the players get a ammo-crystal
 		#-----------------------------------------------------------------------	
+		
 		for crystal in self.ammo_group:
+			# Player 1	
 			if pygame.sprite.collide_mask(crystal, self.player1):
 				self.player1.ammo = min(100, self.player1.ammo + crystal.ammoamount)
 				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
+			# Player 2
 			if pygame.sprite.collide_mask(crystal, self.player2):
 			 	self.player2.ammo = min(100, self.player2.ammo + crystal.ammoamount)
 			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
@@ -302,6 +349,7 @@ class Game():
 		#-----------------------------------------------------------------------
 		#      If asteroids collide with asteroids
 		#-----------------------------------------------------------------------
+		
 		for asteroid in self.asteroid_group:
 			for rock in self.asteroid_group:
 				if rock is not asteroid:
@@ -312,7 +360,6 @@ class Game():
 
 						point = pygame.sprite.collide_mask(asteroid, rock)
 						if point:
-							#print(point)
 							dustexp = Explosion(self.dust_list, point[0]+asteroid.rect.x, point[1]+asteroid.rect.y, 50, 50)
 							self.all_sprites_list.add(dustexp)
 							collision = (asteroid.pos - rock.pos).normalized() * (-1)
@@ -321,36 +368,47 @@ class Game():
 		#-----------------------------------------------------------------------
 		#      If asteroids gets shot
 		#-----------------------------------------------------------------------
+		
 		for asteroid in self.asteroid_group:
+			# Player 1 bullets againts asteroids
 			for bullet in self.player1_bullets:
-				if pygame.sprite.collide_mask(asteroid, bullet):
-					self.asteroid.hp -= 1
-					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
-					self.all_sprites_list.add(self.hitpointexp)
-					if self.asteroid.hp == 0:
-						self.supadeath = Explosion(self.explosion_list, asteroid.pos.x, asteroid.pos.y, 300, 300)
-						self.all_sprites_list.add(self.supadeath)
-						asteroid.respawn()
-					bullet.kill()
-
-			for asteroid in self.asteroid_group:
-				for bullet in self.player2_bullets:
-					if pygame.sprite.collide_mask(asteroid, bullet):
-						self.asteroid.hp -= 1
+				if pygame.sprite.collide_rect(asteroid, bullet):
+					point1 = pygame.sprite.collide_mask(asteroid, bullet)
+					if point1:
+						asteroid.hp -= 1
 						self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
 						self.all_sprites_list.add(self.hitpointexp)
-						if self.asteroid.hp == 0:
-							self.supadeath = Explosion(self.explosion_list, asteroid.pos.x, asteroid.pos.y, 300, 300)
+						if asteroid.hp <= 0:
+							self.supadeath = Explosion(self.explosion_list, asteroid.rect.centerx, asteroid.rect.centery, asteroid.width*2, asteroid.height*2)
 							self.all_sprites_list.add(self.supadeath)
 							asteroid.respawn()
 						bullet.kill()
 
+			# Player 2 bullets against asteroids
+			for asteroid in self.asteroid_group:
+				for bullet in self.player2_bullets:
+					if pygame.sprite.collide_rect(asteroid, bullet):
+						point2 = pygame.sprite.collide_mask(asteroid, bullet)
+						if point2:	
+							asteroid.hp -= 1
+							self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, asteroid.width, asteroid.height)
+							self.all_sprites_list.add(self.hitpointexp)
+							if asteroid.hp <= 0:
+								self.supadeath = Explosion(self.explosion_list, asteroid.rect.centerx, asteroid.rect.centery, asteroid.width*2, asteroid.height*2)
+								self.all_sprites_list.add(self.supadeath)
+								asteroid.respawn()
+							bullet.kill()
+
 		#-----------------------------------------------------------------------
 		#		PLAYERS REACH EVENT HORIZON!
 		#-----------------------------------------------------------------------
+		
+		# Player 1
 		if self.player1.direction.magnitude() < 25:
 			self.player1.dead = True 
 			self.player1.squish(P1DEADPOS)
+		
+		# Player 2
 		if self.player2.direction.magnitude() < 25:
 			self.player2.dead = True
 			self.player2.squish(P2DEADPOS)
@@ -375,7 +433,6 @@ class Game():
 				self.player2.thrusting = True
 		if self.pressed[pygame.K_RCTRL]:
 			self.player2.fire(self.all_sprites_list, self.player2_bullets)
-			self.player2.firing = True
 
 		if self.pressed[pygame.K_d]:
 			self.player1.turnRight()
@@ -384,11 +441,17 @@ class Game():
 		if self.pressed[pygame.K_w]:
 			if self.player1.fuel > 0:
 				self.player1.thrusting = True
-		if self.pressed[pygame.K_q]:
+		if self.pressed[pygame.K_LSHIFT]:
 			self.player1.fire(self.all_sprites_list, self.player1_bullets)
+
+		if self.pressed[pygame.K_r]:
+			self.setup()
+			GAME_STATE = True
 
 	def player_info(self):
 		"""Setting up player information and blitting it on the screen"""
+		
+		# Loading font
 		self.p1_ammo = self.font.render('Ammo: %d' % self.player1.ammo, True, WHITE)
 		self.p2_ammo = self.font.render('Ammo: %d' % self.player2.ammo, True, WHITE)
 		self.p1_stats = self.font.render('kills: %d' % self.player1.kills, True, WHITE)
@@ -400,11 +463,19 @@ class Game():
 		self.screen.blit(self.p2_stats, [SCREENWIDTH - 105, 10])
 		self.screen.blit(self.p2_ammo, [SCREENWIDTH - 105, 30])
 		#Player 1 hp-bar:
+		if self.player1.invincible:
+			p1color = YELLOW
+		else:
+			p1color = RED
 		pygame.draw.rect(self.screen, WHITE, (10, (SCREENHEIGHT-30), 202, 12), 1)
-		pygame.draw.rect(self.screen, RED, (11, (SCREENHEIGHT-29), (self.player1.hp * 2), 10))
+		pygame.draw.rect(self.screen, p1color, (11, (SCREENHEIGHT-29), (max(0,(self.player1.hp * 2))), 10))
 		#Player 2 hp-bar
+		if self.player2.invincible:
+			p2color = YELLOW
+		else:
+			p2color = RED
 		pygame.draw.rect(self.screen, WHITE, ((SCREENWIDTH-222), (SCREENHEIGHT-30), 202, 12), 1)
-		pygame.draw.rect(self.screen, RED, ((SCREENWIDTH-221), (SCREENHEIGHT-29), (self.player2.hp * 2), 10))
+		pygame.draw.rect(self.screen, p2color, ((SCREENWIDTH-221), (SCREENHEIGHT-29), (max(0,(self.player2.hp * 2))), 10))
 		#player 1 fuel bar
 		pygame.draw.rect(self.screen, WHITE, (10, (SCREENHEIGHT-50), 202, 12), 1)
 		pygame.draw.rect(self.screen, GREEN, (11, (SCREENHEIGHT-49), (self.player1.fuel * 2), 10))
@@ -417,7 +488,6 @@ class Game():
 			self.setup()
 			while True:
 				while GAME_STATE:
-					#print("andre var her")
 					# Set background to space image
 					self.screen.blit(self.background, (0, 0))
 					# Handling events

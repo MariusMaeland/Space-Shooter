@@ -1,11 +1,12 @@
 import pygame
 import random
-from variables import *
+from config import *
 
 class Animation(pygame.sprite.Sprite):
+	"""Creates a basic animation for the pick ups"""
 
 	def __init__(self, animationlist, x, y, width = 100, height = 100):
-		""" Constructor. Creates fuel, and ammo crystals. """
+		""" Constructor. Creates fuel, health and ammo crystals. """
 		super().__init__()
 		self.animationlist = animationlist.copy()
 		self.image = self.animationlist[0]
@@ -19,11 +20,10 @@ class Animation(pygame.sprite.Sprite):
 		self.ammoamount = 20
 
 	def respawn(self, x, y):
-		"""makes the crystals respawn at random location after picked up"""
+		"""makes the crystals respawn at random location after picked up.
+			Takes in random x and y position"""
 		self.rect.centerx = x
 		self.rect.centery = y
-		print(self.rect.center)
-		
 
 	def update(self, screen, list):
 		"""updates and animates the sprites"""
