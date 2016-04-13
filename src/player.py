@@ -23,12 +23,16 @@ class Player(pygame.sprite.Sprite):
 		# Load the images for the bullet animation
 		self.bullet_sheet = pygame.image.load("images/bullet2.png").convert_alpha()
 		self.bullets = []
+		for i in range(11):
+			self.bullets.append(self.bullet_sheet.subsurface(i*128, 0, 128, 128))
+		# Load the images for the bullet animation
+		self.powerbullet_sheet = pygame.image.load("images/powerbullets.png").convert_alpha()
+		self.powerbullets = []
+		for i in range(20):
+			self.powerbullets.append(self.powerbullet_sheet.subsurface(i*256, 0, 256, 256))
 		# Load the image for the thruster-flame
 		self.thrusterimage = pygame.image.load("images/jetflame2.png").convert_alpha()
 		self.thruster = []
-		for i in range(11):
-			self.bullets.append(self.bullet_sheet.subsurface(i*128, 0, 128, 128))
-		 # Calculating how many pixels to cut each time from the sheet.
 		self.thruster_width = 64
 		# Sprite number from the thruster list.
 		self.nr = 0
@@ -43,7 +47,9 @@ class Player(pygame.sprite.Sprite):
 		# Various ammo-related stuff
 		self.ammo = 100
 		self.last_shot = 0
-		self.rate_of_fire = 200
+		self.rate_of_fire = 250
+		self.weaponup = False
+		self.weaponup_tick = 0
 		# Health-problems
 		self.dead = False
 		self.invincible = False
@@ -85,33 +91,25 @@ class Player(pygame.sprite.Sprite):
 			# Restrain the rate of fire
 			if (pygame.time.get_ticks()-self.last_shot) > (self.rate_of_fire):
 				if self.ammo:
-					bullet = Bullet(self.bullets, self.dir)
-					bullet.rect.centerx = self.rect.centerx
-					bullet.rect.centery = self.rect.centery
-					# Calculate vectors:
-					bullet.xspeed = math.cos(math.radians(self.dir)) * BULLETSPEED
-					bullet.yspeed = math.sin(math.radians(self.dir)) * (-BULLETSPEED)
-		        	# Add the bullets to the lists
-					all_sprites_list.add(bullet)
-					bullet_list.add(bullet)
-					if TRIPPELMODE:
+					if self.weaponup:
 						#-------------------------------------------
-						bullet = Bullet(self.bullets, self.dir)
+						for i in range(-1, 2):
+							bullet = Bullet(self.powerbullets, self.dir, 20)
+							bullet.rect.centerx = self.rect.centerx
+							bullet.rect.centery = self.rect.centery
+							# Calculate vectors:
+							bullet.xspeed = math.cos(math.radians(self.dir+(i*20))) * BULLETSPEED
+							bullet.yspeed = math.sin(math.radians(self.dir+(i*20))) * (-BULLETSPEED)
+				        	# Add the bullets to the lists
+							all_sprites_list.add(bullet)
+							bullet_list.add(bullet)
+					else:
+						bullet = Bullet(self.bullets, self.dir, 10)
 						bullet.rect.centerx = self.rect.centerx
 						bullet.rect.centery = self.rect.centery
 						# Calculate vectors:
-						bullet.xspeed = math.cos(math.radians(self.dir+20)) * BULLETSPEED
-						bullet.yspeed = math.sin(math.radians(self.dir+20)) * (-BULLETSPEED)
-			        	# Add the bullets to the lists
-						all_sprites_list.add(bullet)
-						bullet_list.add(bullet)
-						#--------------------------------------------
-						bullet = Bullet(self.bullets, self.dir)
-						bullet.rect.centerx = self.rect.centerx
-						bullet.rect.centery = self.rect.centery
-						# Calculate vectors:
-						bullet.xspeed = math.cos(math.radians(self.dir-20)) * BULLETSPEED
-						bullet.yspeed = math.sin(math.radians(self.dir-20)) * (-BULLETSPEED)
+						bullet.xspeed = math.cos(math.radians(self.dir)) * BULLETSPEED
+						bullet.yspeed = math.sin(math.radians(self.dir)) * (-BULLETSPEED)
 			        	# Add the bullets to the lists
 						all_sprites_list.add(bullet)
 						bullet_list.add(bullet)
@@ -156,6 +154,13 @@ class Player(pygame.sprite.Sprite):
 		if self.invincible_tick > (FPS * INVINCIBLETIME):
 			self.invincible = False
 			self.invincible_tick = 0
+
+	def trippelshot(self):
+		self.weaponup_tick += 1
+		if self.weaponup_tick > (FPS * WEAPONUPTIME):
+			self.weaponup = False
+			self.weaponup_tick = 0
+			self.rate_of_fire = 250
 	def update(self, screen, all_sprites_list):
 		"""Updates position, angle, dead and invincleble.
 			Sets a speed limit for the player"""
@@ -164,7 +169,8 @@ class Player(pygame.sprite.Sprite):
 		else:
 			if self.invincible:
 				self.immortal()
-
+			if self.weaponup:
+				self.trippelshot()
 			self.rotate_sprite(self.dir)
 
 			self.thrust()

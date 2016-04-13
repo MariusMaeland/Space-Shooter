@@ -64,5 +64,13 @@ method, there's aslo a general img_list and some for-loops. This is a bit messy 
 should have been abstracted out or the sprite-sheets could be changed to fit 
 within a chosen standard. 
 
+Another small but very important part of the optimisation of the code is in the
+many collision check method in game. We wanted the presicion of the collide_mask 
+which returns the first pixel to overlap between two sprites, this is obviously a heavy operation and should be limited. The collision therefore checks collisions using the collide_rect which is a lot faster, and only then proceeds to check for overlapping pixels.
+
+
+
+
+
  
     

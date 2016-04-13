@@ -3,7 +3,7 @@ from config import *
 
 class Bullet(pygame.sprite.Sprite):
 	"""Constructor, creates a bullet fired by one of the two players."""
-	def __init__(self, bulletlist, direction, scale = 40):
+	def __init__(self, bulletlist, direction, damage, scale = 40):
 		""" Constructor. Creates a bullet. """
 		super().__init__()
 		self.bullet = bulletlist.copy()
@@ -15,6 +15,7 @@ class Bullet(pygame.sprite.Sprite):
 		self.yspeed = 0
 		self.xspeed = 0
 		self.nr = 0
+		self.damage = damage
 
 	def update(self, screen, all_sprites_list):
 		"""Moves the bullet in the direction the  player is facing"""

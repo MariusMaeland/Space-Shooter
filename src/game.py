@@ -169,10 +169,10 @@ class Game():
 				if self.player2.invincible:
 					pass
 				elif self.player2.hp > 0:
-					self.player2.hp -= 10
+					self.player2.hp -= bullet.damage
 					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
 					self.all_sprites_list.add(self.hitpointexp)
-					if self.player2.hp == 0:
+					if self.player2.hp <= 0:
 						self.player2.dead = True
 						self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 200, 200)
 						self.all_sprites_list.add(self.death)
@@ -188,10 +188,10 @@ class Game():
 				if self.player1.invincible:
 					pass
 				elif self.player1.hp > 0:
-					self.player1.hp -= 10
+					self.player1.hp -= bullet.damage
 					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
 					self.all_sprites_list.add(self.hitpointexp)
-					if self.player1.hp == 0:
+					if self.player1.hp <= 0:
 						self.player1.dead = True
 						self.death = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 200, 200)
 						self.all_sprites_list.add(self.death)
@@ -340,12 +340,19 @@ class Game():
 				self.player1.ammo = min(100, self.player1.ammo + crystal.ammoamount)
 				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+				if (random.randint(1, 100) <= WEAPONUPCHANCE) and not self.player1.weaponup: 
+					self.player1.weaponup = True
+					self.player1.rate_of_fire = 200
 
 			# Player 2
 			if pygame.sprite.collide_mask(crystal, self.player2):
 			 	self.player2.ammo = min(100, self.player2.ammo + crystal.ammoamount)
 			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
 								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+			 	if (random.randint(1, 100) <= WEAPONUPCHANCE) and not self.player2.weaponup:
+			 		self.player2.weaponup = True
+			 		self.player2.rate_of_fire = 200
+
 		#-----------------------------------------------------------------------
 		#      If asteroids collide with asteroids
 		#-----------------------------------------------------------------------
@@ -479,9 +486,20 @@ class Game():
 		#player 1 fuel bar
 		pygame.draw.rect(self.screen, WHITE, (10, (SCREENHEIGHT-50), 202, 12), 1)
 		pygame.draw.rect(self.screen, GREEN, (11, (SCREENHEIGHT-49), (self.player1.fuel * 2), 10))
+		# Player 1 weaponupgrade-bar
+		if self.player1.weaponup:
+			fraction1 = 200//((FPS*WEAPONUPTIME)/self.player1.weaponup_tick)
+			pygame.draw.rect(self.screen, WHITE, (10, (SCREENHEIGHT-80), 202, 12), 1)
+			pygame.draw.rect(self.screen, LIGHTBLUE, (11, (SCREENHEIGHT-79), (200-fraction1), 10))
 		#player 2 fuel bar
 		pygame.draw.rect(self.screen, WHITE, ((SCREENWIDTH-222), (SCREENHEIGHT-50), 202, 12), 1)
 		pygame.draw.rect(self.screen, GREEN, ((SCREENWIDTH-221), (SCREENHEIGHT-49), (self.player2.fuel * 2), 10))
+		# Player 2 weaponupgrade-bar
+		if self.player2.weaponup:
+			fraction2 = 200//((FPS*WEAPONUPTIME)/self.player2.weaponup_tick)
+			pygame.draw.rect(self.screen, WHITE, ((SCREENWIDTH-222), (SCREENHEIGHT-80), 202, 12), 1)
+			pygame.draw.rect(self.screen, LIGHTBLUE, ((SCREENWIDTH-221), (SCREENHEIGHT-79), (200-fraction2), 10))
+
 
 	def run(self):
 			"""Runs an instance of itself..."""

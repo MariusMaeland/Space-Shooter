@@ -26,9 +26,10 @@ P2STARTANGLE = 180
 P2DEADPOS = (SCREENWIDTH + 500, SCREENHEIGHT + 500)
 
 # For an added challenge, set TRIPPELMODE to True!
-TRIPPELMODE = True
-BULLETSPEED = 15
-PLAYERMAXSPEED = 4
+WEAPONUPTIME = 10 # In seconds
+WEAPONUPCHANCE = 10 # In percent
+BULLETSPEED = 15 # In pixels/frame
+PLAYERMAXSPEED = 4 # In pixels/frame
 ship_image_list = ["images/ship1.png", "images/ship2.png", "images/ship3.png", "images/ship4.png"]
 
 # Asteroid stuff
