@@ -5,9 +5,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%          Fill in the title details                      %%%
 
-\def \thetitle {INF-1101 Datastrukturer og algoritmer}
-\def \thesubtitle {Assignment 1 - Set ADT}
-\def \theauthor {Kandidatnummer 0}
+\def \thetitle {INF-1400 Object oriented programming}
+\def \thesubtitle {Assignment 3 - Mayhem clone}
+\def \theauthor {Marius Mæland and Raymon S. Hansen}
 \def \pagecount {3}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -62,7 +62,9 @@
 
 \section{Introduction}
 
-Short introduction to the assignment, motivation and expected results.
+Short introduction to the assignment, motivation and expected results.\\
+
+
 
 \subsection{Requirements}
 
