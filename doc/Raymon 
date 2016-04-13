@@ -1,3 +1,5 @@
+Technical
+
 One of the requirements was that all moving objects in the game should sub-class
 pygames sprite module. The pygame Sprite module is designed to make simple game 
 design easier for developers. It includes built in functions for referring to 
@@ -14,3 +16,53 @@ making animations with sprite sheets. Linking the actual code and the image
 files has given us valuable insight into how code interacts with "the outside world".
 Cutting specific sections of a sprite sheet proved difficult at times, as each sheet
 had a different layout, size, padding, alpha channels etc. 
+
+Implementation
+The assignment was written in python using Sublime Text build 3103 on Linux Mint 17
+”Qiana” and Linux Xubuntu 14.04 running kernel version 3.13.0-24-generic GNU/Linux. 
+It also uses the pygame-library.
+
+The various images and sprite sheets have all been edited using 
+GIMP(GNU Image Manipulation Program). 
+
+Profiling tools pydoc and cprofiler. 
+%TODO: Add more!
+
+Discussion
+During tha writing of this assignment we have endeavoured to keep the architecture 
+simple and easily understandable. In addition, we wanted it to be easy to expand with 
+new ideas and elements. One of the reasons for working in a team was to experience 
+how to manage one project with more writers. This forced us to carefully considder 
+how encapsulation is handled. It must be possible for one person to work on some 
+part of the code and the other works on another part, without worrying about 
+making changes that ruin both writers contributions. As a result, the code has a 
+fairly solid design on the whole. The game-class manages all the other classes 
+as well as their interactions with each other(mainly when they crash!). 
+
+The explosion-class is a good example of solid and reusable code. It takes in a
+list of the frames to animate the explsion(this can then be any animation you like)
+as well as the point where you want it and the size. This made it very simple to
+animate explsions when asteroids blow up, players die etc. The puff of dust when 
+asteroids bump into eachother, is also an instance of the explosion-class.
+
+A similar concept is used for the power ups as they are all instances of the animation-class
+They each get sent a different coloured list of frames to animate the crystals as well
+as placement and size. 
+
+A possible improvement on the explosion and animation would be to have a more general 
+animation parent-class from which one could make power ups, explosions and so on 
+inherit.
+
+Loading images and cutting subsurfaces from a sprite-sheet are heavy operations,
+therefore we have tried to do most of the loading in the game-class setup-method.
+The preloaded lists are then sent to each class where they are needed. The actua 
+cutting of the animation-sheets are mostly done using nested for-loops to traverse
+the image. We made some attempts at abstracting this process out as it is done 
+several times. This proved difficult however because of great variasions in the 
+layout of the sprite-sheets. As a result, the setup-method has it's own sheetcutter
+method, there's aslo a general img_list and some for-loops. This is a bit messy and
+should have been abstracted out or the sprite-sheets could be changed to fit 
+within a chosen standard. 
+
+ 
+    

@@ -13,8 +13,8 @@ from functions import *
 
 """
 Space Shooter Game
-Made by:
-Marius Mæland and Raymon Skjørten Hansen
+Made by
+Marius Maeland and Raymon Skjørten Hansen
 
 Thanks to all the makers of the awesome sprites we have used!
 See: references.txt 
