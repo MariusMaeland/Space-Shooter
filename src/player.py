@@ -103,6 +103,8 @@ class Player(pygame.sprite.Sprite):
 				        	# Add the bullets to the lists
 							all_sprites_list.add(bullet)
 							bullet_list.add(bullet)
+							# Decrease the ammo count
+							self.ammo = max(0, self.ammo-1)
 					else:
 						bullet = Bullet(self.bullets, self.dir, 10)
 						bullet.rect.centerx = self.rect.centerx
@@ -113,9 +115,9 @@ class Player(pygame.sprite.Sprite):
 			        	# Add the bullets to the lists
 						all_sprites_list.add(bullet)
 						bullet_list.add(bullet)
+						# Decrease the ammo count
+						self.ammo = max(0, self.ammo-1)
 					self.last_shot = pygame.time.get_ticks()
-					# Decrease the ammo count
-					self.ammo -= 1
 
 	def turnLeft(self):
 		"""Turns the ship to the left"""

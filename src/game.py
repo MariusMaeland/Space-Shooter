@@ -165,72 +165,73 @@ class Game():
 		#                    Player 2 gets hit or killed by player 1!
 		#-----------------------------------------------------------------------
 		for bullet in self.player1_bullets:
-			if pygame.sprite.collide_mask(bullet, self.player2):
-				if self.player2.invincible:
-					pass
-				elif self.player2.hp > 0:
-					self.player2.hp -= bullet.damage
-					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
-					self.all_sprites_list.add(self.hitpointexp)
-					if self.player2.hp <= 0:
-						self.player2.dead = True
-						self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 200, 200)
-						self.all_sprites_list.add(self.death)
-						self.player2.squish(P2DEADPOS)
-						self.player1.kills += 1
-						self.player2.fuel = 100
-				bullet.kill()
+			if pygame.sprite.collide_rect(bullet, self.player2):
+				if pygame.sprite.collide_mask(bullet, self.player2):
+					if self.player2.invincible:
+						pass
+					elif self.player2.hp > 0:
+						self.player2.hp -= bullet.damage
+						self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
+						self.all_sprites_list.add(self.hitpointexp)
+						if self.player2.hp <= 0:
+							self.player2.dead = True
+							self.death = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 200, 200)
+							self.all_sprites_list.add(self.death)
+							self.player2.squish(P2DEADPOS)
+							self.player1.kills += 1
+							self.player2.fuel = 100
+					bullet.kill()
 		#-----------------------------------------------------------------------
 		#                    Player 1 gets hit or killed by player 2!
 		#-----------------------------------------------------------------------
 		for bullet in self.player2_bullets:
-			if pygame.sprite.collide_mask(bullet, self.player1):
-				if self.player1.invincible:
-					pass
-				elif self.player1.hp > 0:
-					self.player1.hp -= bullet.damage
-					self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
-					self.all_sprites_list.add(self.hitpointexp)
-					if self.player1.hp <= 0:
-						self.player1.dead = True
-						self.death = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 200, 200)
-						self.all_sprites_list.add(self.death)
-						self.player1.squish(P1DEADPOS)
-						self.player2.kills += 1
-						self.player1.fuel = 100
-					
-				bullet.kill()
+			if pygame.sprite.collide_rect(bullet, self.player1):
+				if pygame.sprite.collide_mask(bullet, self.player1):
+					if self.player1.invincible:
+						pass
+					elif self.player1.hp > 0:
+						self.player1.hp -= bullet.damage
+						self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
+						self.all_sprites_list.add(self.hitpointexp)
+						if self.player1.hp <= 0:
+							self.player1.dead = True
+							self.death = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 200, 200)
+							self.all_sprites_list.add(self.death)
+							self.player1.squish(P1DEADPOS)
+							self.player2.kills += 1
+							self.player1.fuel = 100
+						
+					bullet.kill()
 		#-----------------------------------------------------------------------
 		#                    If the players crash!
-		#-----------------------------------------------------------------------	
-		if pygame.sprite.collide_mask(self.player1, self.player2):
-			if (self.player1.dead or self.player2.dead):
-				pass
-			if (self.player1.invincible or self.player2.invincible):
-				pass
-			else:
-				p1dir = (self.player1.pos - self.player2.pos)
-				self.player1.speed += p1dir
-				
-				p2dir = (self.player2.pos - self.player1.pos)
-				self.player2.speed += p2dir
+		#-----------------------------------------------------------------------
+		if pygame.sprite.collide_rect(self.player1, self.player2):	
+			if pygame.sprite.collide_mask(self.player1, self.player2):
+				if (self.player1.dead or self.player2.dead):
+					pass
+				else:
+					p1dir = (self.player1.pos - self.player2.pos)
+					self.player1.speed += p1dir
+					
+					p2dir = (self.player2.pos - self.player1.pos)
+					self.player2.speed += p2dir
 
-				self.player1.hp -= 10 
-				self.player2.hp -= 10
-				if self.player1.hp <= 0:
-					self.player1.dead = True
-					self.supadeath1 = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
-					self.all_sprites_list.add(self.supadeath1)
-					self.player1.squish(P1DEADPOS)
-					self.player1.fuel = 100
+					self.player1.hp -= 10 
+					self.player2.hp -= 10
+					if self.player1.hp <= 0:
+						self.player1.dead = True
+						self.supadeath1 = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
+						self.all_sprites_list.add(self.supadeath1)
+						self.player1.squish(P1DEADPOS)
+						self.player1.fuel = 100
 
 
-				if self.player2.hp <= 0:
-					self.player2.dead = True
-					self.supadeath2 = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
-					self.all_sprites_list.add(self.supadeath2)
-					self.player2.squish(P2DEADPOS)
-					self.player2.fuel = 100
+					if self.player2.hp <= 0:
+						self.player2.dead = True
+						self.supadeath2 = Explosion(self.explosion_list, self.player2.rect.centerx, self.player2.rect.centery, 400, 400)
+						self.all_sprites_list.add(self.supadeath2)
+						self.player2.squish(P2DEADPOS)
+						self.player2.fuel = 100
 				
 				
 
@@ -302,16 +303,18 @@ class Game():
 		
 		for crystal in self.fuel_group:
 			# Player 1
-			if pygame.sprite.collide_mask(crystal, self.player1):
-				self.player1.fuel = min(100, self.player1.hp + crystal.fuelamount)
-				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
-								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+			if pygame.sprite.collide_rect(crystal, self.player1):				
+				if pygame.sprite.collide_mask(crystal, self.player1):
+					self.player1.fuel = min(100, self.player1.hp + crystal.fuelamount)
+					crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+									(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
 			# Player 2
-			if pygame.sprite.collide_mask(crystal, self.player2):
-			 	self.player2.fuel = min(100, self.player2.fuel + crystal.fuelamount)
-			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
-								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+			if pygame.sprite.collide_rect(crystal, self.player2):
+				if pygame.sprite.collide_mask(crystal, self.player2):
+				 	self.player2.fuel = min(100, self.player2.fuel + crystal.fuelamount)
+				 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+									(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 		
 		#-----------------------------------------------------------------------
 		#      If the players get a healing-crystal
@@ -319,39 +322,43 @@ class Game():
 		
 		for crystal in self.health_group:
 			# Player 1
-			if pygame.sprite.collide_mask(crystal, self.player1):
-				self.player1.hp = min(100, self.player1.hp + crystal.hpamount)
-				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
-								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+			if pygame.sprite.collide_rect(crystal, self.player1):
+				if pygame.sprite.collide_mask(crystal, self.player1):
+					self.player1.hp = min(100, self.player1.hp + crystal.hpamount)
+					crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+									(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
 			# Player 2
-			if pygame.sprite.collide_mask(crystal, self.player2):
-			 	self.player2.hp = min(100, self.player2.hp + crystal.hpamount)
-			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
-								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+			if pygame.sprite.collide_rect(crystal, self.player2):				
+				if pygame.sprite.collide_mask(crystal, self.player2):
+				 	self.player2.hp = min(100, self.player2.hp + crystal.hpamount)
+				 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+									(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
 
 		#--------------------------------------------------------a---------------
 		#      If the players get a ammo-crystal
 		#-----------------------------------------------------------------------	
 		
 		for crystal in self.ammo_group:
-			# Player 1	
-			if pygame.sprite.collide_mask(crystal, self.player1):
-				self.player1.ammo = min(100, self.player1.ammo + crystal.ammoamount)
-				crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
-								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
-				if (random.randint(1, 100) <= WEAPONUPCHANCE) and not self.player1.weaponup: 
-					self.player1.weaponup = True
-					self.player1.rate_of_fire = 200
+			# Player 1
+			if pygame.sprite.collide_rect(crystal, self.player1):	
+				if pygame.sprite.collide_mask(crystal, self.player1):
+					self.player1.ammo = min(100, self.player1.ammo + crystal.ammoamount)
+					crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+									(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+					if (random.randint(1, 100) <= WEAPONUPCHANCE) and not self.player1.weaponup: 
+						self.player1.weaponup = True
+						self.player1.rate_of_fire = 200
 
 			# Player 2
-			if pygame.sprite.collide_mask(crystal, self.player2):
-			 	self.player2.ammo = min(100, self.player2.ammo + crystal.ammoamount)
-			 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
-								(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
-			 	if (random.randint(1, 100) <= WEAPONUPCHANCE) and not self.player2.weaponup:
-			 		self.player2.weaponup = True
-			 		self.player2.rate_of_fire = 200
+			if pygame.sprite.collide_rect(crystal, self.player2):
+				if pygame.sprite.collide_mask(crystal, self.player2):
+				 	self.player2.ammo = min(100, self.player2.ammo + crystal.ammoamount)
+				 	crystal.respawn((random.randint((0+SCREENWIDTH//4),(SCREENWIDTH-SCREENWIDTH//4))), 
+									(random.randint((0+SCREENHEIGHT//4),(SCREENHEIGHT-SCREENHEIGHT//4))))
+				 	if (random.randint(1, 100) <= WEAPONUPCHANCE) and not self.player2.weaponup:
+				 		self.player2.weaponup = True
+				 		self.player2.rate_of_fire = 200
 
 		#-----------------------------------------------------------------------
 		#      If asteroids collide with asteroids
@@ -382,7 +389,7 @@ class Game():
 				if pygame.sprite.collide_rect(asteroid, bullet):
 					point1 = pygame.sprite.collide_mask(asteroid, bullet)
 					if point1:
-						asteroid.hp -= 1
+						asteroid.hp -= bullet.damage//10
 						self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, 50, 50)
 						self.all_sprites_list.add(self.hitpointexp)
 						if asteroid.hp <= 0:
@@ -397,7 +404,7 @@ class Game():
 					if pygame.sprite.collide_rect(asteroid, bullet):
 						point2 = pygame.sprite.collide_mask(asteroid, bullet)
 						if point2:	
-							asteroid.hp -= 1
+							asteroid.hp -= bullet.damage//10
 							self.hitpointexp = Explosion(self.explosion_list, bullet.rect.x, bullet.rect.y, asteroid.width, asteroid.height)
 							self.all_sprites_list.add(self.hitpointexp)
 							if asteroid.hp <= 0:
