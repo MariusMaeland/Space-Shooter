@@ -20,9 +20,14 @@ class Player(pygame.sprite.Sprite):
 		self.pos = Vector2D(self.startx, self.starty)
 		self.rect.centerx = self.pos.x
 		self.rect.centery = self.pos.y
+		# Load the images for the bullet animation
+		self.bullet_sheet = pygame.image.load("images/bullet2.png").convert_alpha()
+		self.bullets = []
 		# Load the image for the thruster-flame
 		self.thrusterimage = pygame.image.load("images/jetflame2.png").convert_alpha()
 		self.thruster = []
+		for i in range(11):
+			self.bullets.append(self.bullet_sheet.subsurface(i*128, 0, 128, 128))
 		 # Calculating how many pixels to cut each time from the sheet.
 		self.thruster_width = 64
 		# Sprite number from the thruster list.
@@ -80,7 +85,7 @@ class Player(pygame.sprite.Sprite):
 			# Restrain the rate of fire
 			if (pygame.time.get_ticks()-self.last_shot) > (self.rate_of_fire):
 				if self.ammo:
-					bullet = Bullet()
+					bullet = Bullet(self.bullets, self.dir)
 					bullet.rect.centerx = self.rect.centerx
 					bullet.rect.centery = self.rect.centery
 					# Calculate vectors:
