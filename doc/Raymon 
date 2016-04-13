@@ -1,0 +1,16 @@
+One of the requirements was that all moving objects in the game should sub-class
+pygames sprite module. The pygame Sprite module is designed to make simple game 
+design easier for developers. It includes built in functions for referring to 
+and working with coordinates, displaying images for a better graphical look as
+well as detecting collisions and working with objects/sprites in groups. 
+
+Sprite groups is practical because it makes the use of polymorphism very easy.
+The sprite module has a built in draw function which blits each sprites "image" 
+attribute on a surface. We have also used this to simplify per frame update calls
+on many different objects.
+
+Allthough not a specific requirement, we have implemented and thoroughly enjoyed 
+making animations with sprite sheets. Linking the actual code and the image 
+files has given us valuable insight into how code interacts with "the outside world".
+Cutting specific sections of a sprite sheet proved difficult at times, as each sheet
+had a different layout, size, padding, alpha channels etc. 
