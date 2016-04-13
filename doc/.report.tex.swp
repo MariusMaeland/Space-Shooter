@@ -64,24 +64,64 @@
 
 Short introduction to the assignment, motivation and expected results.\\
 
-
+The assignment is to implement a clone of the old game Mayhem, but in this case we ended up with a space shooter death match type of game, however all of the requirements of the assignment are met. 
 
 \subsection{Requirements}
 
-Outline the detailed requirements specified in the assignment text.
+Outline the detailed requirements specified in the assignment text. \\
+
+Requrements for this assignment is to create a multiplayer game where each player can control their spaceship with four buttons, when thrusting the spaceships should move in the direction it is pointing, and are to be rotated right or left to control where to go. The ships should also be able to fire bullets.\\
+
+Other requirements for the game:
 
 \begin{itemize}
 
-\item First requirement
-\item Next requirement
-\item etc.
+\item Two space ships
+\item Four controls for each player
+\item Controls: rotate left, rotate right, thrust and fire
+\item Minimum one obstacle
+\item Spaceship can crash with other objects on the screen
+\item Gravity that acts on spaceships
+\item A score for each player displayed on screen
+\item Limited amount of fuel to the spaceships
+\item Refuel station/ refuel pick up
 
 \end{itemize}
 
+There are also some requirements for the code:
+
+\begin{itemize}
+
+\item The code should be split in minimum two files
+\item The main loop must have timing
+\item The game shall be started using: 
+\begin{verbatim} if__name__ == '__main__':\end{verbatim}
+\item All visible objects shall subclass the pygame.sprite.Sprite class
+\item All modules, classes and methods shall contain docstrings
+
+\end{itemize}
 
 \section{Technical Background}
 
-Which topics are covered in this assignment. Should be short and cover the necessary topics without mentioning your specific implementation and design.
+Which topics are covered in this assignment. Should be short and cover the necessary topics without mentioning your specific implementation and design.\\
+
+One of the requirements was that all moving objects in the game should sub-class
+pygames sprite module. The pygame Sprite module is designed to make simple game 
+design easier for developers. It includes built in functions for referring to 
+and working with coordinates, displaying images for a better graphical look as
+well as detecting collisions and working with objects/sprites in groups. 
+
+Sprite groups is practical because it makes the use of polymorphism very easy.
+The sprite module has a built in draw function which blits each sprites "image" 
+attribute on a surface. We have also used this to simplify per frame update calls
+on many different objects.
+
+Allthough not a specific requirement, we have implemented and thoroughly enjoyed 
+making animations with sprite sheets. Linking the actual code and the image 
+files has given us valuable insight into how code interacts with "the outside world".
+Cutting specific sections of a sprite sheet proved difficult at times, as each sheet
+had a different layout, size, padding, alpha channels etc. 
+
 
 \subsection{Data Structures}
 
