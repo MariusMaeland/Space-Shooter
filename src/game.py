@@ -217,9 +217,10 @@ class Game():
 					
 					p2dir = (self.player2.pos - self.player1.pos)
 					self.player2.speed += p2dir
-
-					self.player1.hp -= 10 
-					self.player2.hp -= 10
+					if not self.player1.invincible:
+						self.player1.hp -= 10
+					if not self.player2.invincible: 
+						self.player2.hp -= 10
 					if self.player1.hp <= 0:
 						self.player1.dead = True
 						self.supadeath1 = Explosion(self.explosion_list, self.player1.rect.centerx, self.player1.rect.centery, 400, 400)
