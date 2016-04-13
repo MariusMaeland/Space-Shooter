@@ -35,7 +35,7 @@ class Game():
 		self.clock = pygame.time.Clock()
 		self.background = pygame.image.load("images/space.png")
 		# Loading font
-		self.font = pygame.font.SysFont('fonts/Roboto-Black.ttf', 25, False, False)
+		self.font = pygame.font.SysFont('Roboto-Black.ttf', 25, False, False)
 
 	def setup(self):
 		"""Loads and cuts all the sprite sheets.
