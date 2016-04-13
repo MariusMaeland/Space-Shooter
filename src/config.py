@@ -3,7 +3,7 @@ from precode import *
 """A collection of all the global variables used in the game"""
 
 SCREENWIDTH = 1200 # Width of the window
-SCREENHEIGHT = 800 # Height of the window
+SCREENHEIGHT = 700 # Height of the window
 CAPTION = 'Space Shooter'
 FPS = 60
 GAME_STATE = True
@@ -25,6 +25,8 @@ P2STARTPOS = (SCREENWIDTH - 50, SCREENHEIGHT//2)
 P2STARTANGLE = 180
 P2DEADPOS = (SCREENWIDTH + 500, SCREENHEIGHT + 500)
 
+# For an added challenge, set TRIPPELMODE to True!
+TRIPPELMODE = True
 BULLETSPEED = 15
 PLAYERMAXSPEED = 4
 ship_image_list = ["images/ship1.png", "images/ship2.png", "images/ship3.png", "images/ship4.png"]

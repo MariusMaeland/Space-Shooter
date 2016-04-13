@@ -94,6 +94,27 @@ class Player(pygame.sprite.Sprite):
 		        	# Add the bullets to the lists
 					all_sprites_list.add(bullet)
 					bullet_list.add(bullet)
+					if TRIPPELMODE:
+						#-------------------------------------------
+						bullet = Bullet(self.bullets, self.dir)
+						bullet.rect.centerx = self.rect.centerx
+						bullet.rect.centery = self.rect.centery
+						# Calculate vectors:
+						bullet.xspeed = math.cos(math.radians(self.dir+20)) * BULLETSPEED
+						bullet.yspeed = math.sin(math.radians(self.dir+20)) * (-BULLETSPEED)
+			        	# Add the bullets to the lists
+						all_sprites_list.add(bullet)
+						bullet_list.add(bullet)
+						#--------------------------------------------
+						bullet = Bullet(self.bullets, self.dir)
+						bullet.rect.centerx = self.rect.centerx
+						bullet.rect.centery = self.rect.centery
+						# Calculate vectors:
+						bullet.xspeed = math.cos(math.radians(self.dir-20)) * BULLETSPEED
+						bullet.yspeed = math.sin(math.radians(self.dir-20)) * (-BULLETSPEED)
+			        	# Add the bullets to the lists
+						all_sprites_list.add(bullet)
+						bullet_list.add(bullet)
 					self.last_shot = pygame.time.get_ticks()
 					# Decrease the ammo count
 					self.ammo -= 1
