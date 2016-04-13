@@ -166,6 +166,7 @@ class Game():
 		#-----------------------------------------------------------------------
 		for bullet in self.player1_bullets:
 			if pygame.sprite.collide_rect(bullet, self.player2):
+				#pygame.draw.rect(self.screen, WHITE, bullet.rect, 1)
 				if pygame.sprite.collide_mask(bullet, self.player2):
 					if self.player2.invincible:
 						pass
@@ -186,6 +187,7 @@ class Game():
 		#-----------------------------------------------------------------------
 		for bullet in self.player2_bullets:
 			if pygame.sprite.collide_rect(bullet, self.player1):
+				#pygame.draw.rect(self.screen, WHITE, bullet.rect, 1)
 				if pygame.sprite.collide_mask(bullet, self.player1):
 					if self.player1.invincible:
 						pass

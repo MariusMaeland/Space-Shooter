@@ -30,6 +30,8 @@ class Bullet(pygame.sprite.Sprite):
 			self.kill()
 		if(self.rect.centery < 0):
 			self.kill()
+		if DEBUG:
+			pygame.draw.rect(screen, (255,0,0), self.rect, 1)
 
 	def animate_bullet(sprite, screen, degrees, scale):
 		"""animating the image"""
