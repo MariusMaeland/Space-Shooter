@@ -69,65 +69,43 @@ many collision check method in game. We wanted the presicion of the collide_mask
 which returns the first pixel to overlap between two sprites, this is obviously a heavy operation and should be limited. The collision therefore checks collisions using the collide_rect which is a lot faster, and only then proceeds to check for overlapping pixels.
 
 ----------------------------------------------------------------------------------------------------------------------
-Thu Apr 14 13:26:44 2016    cProfile
+Thu Apr 14 14:18:28 2016    cProfile
 
-         2758398 function calls in 109.140 seconds
+         16112337 function calls in 643.904 seconds
 
    Ordered by: call count
-   List reduced from 100 to 10 due to restriction <10>
+   List reduced from 101 to 10 due to restriction <10>
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-   340128    0.309    0.000    0.400    0.000 /usr/local/lib/python3.4/dist-packages/pygame/sprite.py:1287(collide_rect)
-   340128    0.091    0.000    0.091    0.000 {method 'colliderect' of 'pygame.Rect' objects}
-   257408    0.351    0.000    0.351    0.000 /usr/local/lib/python3.4/dist-packages/pygame/sprite.py:303(sprites)
-   249364    0.078    0.000    0.078    0.000 {built-in method iter}
-   249364    0.316    0.000    0.683    0.000 /usr/local/lib/python3.4/dist-packages/pygame/sprite.py:339(__iter__)
-   208405    0.189    0.000    0.189    0.000 /home/raymon/src/Space-Shooter/src/precode.py:21(__init__)
-   135484    0.345    0.000    0.401    0.000 /home/raymon/src/Space-Shooter/src/precode.py:70(magnitude)
-   135484    0.055    0.000    0.055    0.000 {built-in method sqrt}
-   110141   58.764    0.001   58.764    0.001 {method 'blit' of 'pygame.Surface' objects}
-    61158    0.130    0.000    0.185    0.000 /home/raymon/src/Space-Shooter/src/precode.py:32(__add__)
+  2011182    0.554    0.000    0.554    0.000 {method 'colliderect' of 'pygame.Rect' objects}
+  2011182    1.845    0.000    2.399    0.000 sprite.py:1287(collide_rect)
+  1492992    2.168    0.000    2.168    0.000 sprite.py:303(sprites)
+  1446336    1.930    0.000    4.135    0.000 sprite.py:339(__iter__)
+  1446336    0.444    0.000    0.444    0.000 {built-in method iter}
+  1230017    1.079    0.000    1.079    0.000 precode.py:21(__init__)
+   797797    0.324    0.000    0.324    0.000 {built-in method sqrt}
+   797797    1.959    0.000    2.283    0.000 precode.py:70(magnitude)
+   618347  344.058    0.001  344.058    0.001 {method 'blit' of 'pygame.Surface' objects}
+   352654    0.701    0.000    1.001    0.000 precode.py:32(__add__)
 
+Thu Apr 14 14:18:28 2016    cProfile
 
-Thu Apr 14 13:26:44 2016    cProfile
-
-         2758398 function calls in 109.140 seconds
-
-   Ordered by: cumulative time
-   List reduced from 100 to 10 due to restriction <10>
-
-   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.000    0.000  109.140  109.140 {built-in method exec}
-        1    0.000    0.000  109.140  109.140 <string>:1(<module>)
-        1    0.217    0.217  109.140  109.140 game.py:516(run)
-   110141   58.764    0.001   58.764    0.001 {method 'blit' of 'pygame.Surface' objects}
-     4022    0.172    0.000   30.464    0.008 /usr/local/lib/python3.4/dist-packages/pygame/sprite.py:452(update)
-     8044    0.223    0.000   24.121    0.003 /home/raymon/src/Space-Shooter/src/player.py:166(update)
-     6415    0.778    0.000   23.447    0.004 /home/raymon/src/Space-Shooter/src/player.py:202(rotate_sprite)
-     4022   17.408    0.004   17.408    0.004 {built-in method flip}
-    20343   16.179    0.001   16.179    0.001 {built-in method rotate}
-    23057    4.332    0.000    4.332    0.000 {built-in method from_surface}
-
-
-Thu Apr 14 13:26:44 2016    cProfile
-
-         2758398 function calls in 109.140 seconds
+         16112337 function calls in 643.904 seconds
 
    Ordered by: internal time
-   List reduced from 100 to 10 due to restriction <10>
+   List reduced from 101 to 10 due to restriction <10>
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-   110141   58.764    0.001   58.764    0.001 {method 'blit' of 'pygame.Surface' objects}
-     4022   17.408    0.004   17.408    0.004 {built-in method flip}
-    20343   16.179    0.001   16.179    0.001 {built-in method rotate}
-    23057    4.332    0.000    4.332    0.000 {built-in method from_surface}
-    48910    2.229    0.000    2.229    0.000 {built-in method scale}
-     6682    1.932    0.000    1.932    0.000 {method 'copy' of 'pygame.Surface' objects}
-     6415    0.778    0.000   23.447    0.004 /home/raymon/src/Space-Shooter/src/player.py:202(rotate_sprite)
-     4022    0.684    0.000    2.314    0.001 game.py:161(collisionchecks)
-       15    0.487    0.032    0.487    0.032 {built-in method load_extended}
-    24132    0.385    0.000    2.741    0.000 /home/raymon/src/Space-Shooter/src/asteroid.py:31(update)
-
+   618347  344.058    0.001  344.058    0.001 {method 'blit' of 'pygame.Surface' objects}
+    23328  102.980    0.004  102.980    0.004 {built-in method flip}
+   113309  101.839    0.001  101.839    0.001 {built-in method rotate}
+   153064   25.605    0.000   25.605    0.000 {built-in method from_surface}
+   263887   13.013    0.000   13.013    0.000 {built-in method scale}
+    37664   10.847    0.000   10.847    0.000 {method 'copy' of 'pygame.Surface' objects}
+    36189    4.425    0.000  134.391    0.004 player.py:202(rotate_sprite)
+    23328    4.039    0.000   14.607    0.001 game.py:161(collisionchecks)
+   139968    2.228    0.000   16.848    0.000 asteroid.py:31(update)
+  1492992    2.168    0.000    2.168    0.000 sprite.py:303(sprites)
 
 
 
