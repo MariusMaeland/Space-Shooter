@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import pstats as pstats
+import cProfile as profile
 import pygame
 import random
 import math
@@ -534,4 +536,9 @@ class Game():
 
 if __name__ == "__main__":
 	game = Game()
-	game.run()
+	profile.run("game.run()", "cProfile")
+	p = pstats.Stats('cProfile')
+	p.sort_stats('ncalls').print_stats(20)
+	p.sort_stats('cumtime').print_stats(20)
+
+	
