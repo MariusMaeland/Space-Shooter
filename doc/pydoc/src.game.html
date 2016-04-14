@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module game</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>game</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/raymon/src/Space-Shooter/src/game.py">/home/raymon/src/Space-Shooter/src/game.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="math.html">math</a><br>
+<a href="cProfile.html">cProfile</a><br>
+</td><td width="25%" valign=top><a href="pstats.html">pstats</a><br>
+<a href="pygame.html">pygame</a><br>
+</td><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="game.html#Game">Game</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Game">class <strong>Game</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Initializes&nbsp;the&nbsp;game&nbsp;and&nbsp;handles&nbsp;setting&nbsp;up&nbsp;the&nbsp;game,<br>
+user&nbsp;input,&nbsp;collision-checks&nbsp;and&nbsp;prints&nbsp;player&nbsp;info&nbsp;on&nbsp;the&nbsp;screen.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Game-__init__"><strong>__init__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Game-collisionchecks"><strong>collisionchecks</strong></a>(self)</dt><dd><tt>Collision&nbsp;handler&nbsp;to&nbsp;handle&nbsp;all&nbsp;of&nbsp;the&nbsp;collision&nbsp;checks</tt></dd></dl>
+
+<dl><dt><a name="Game-eventhandler"><strong>eventhandler</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Game-player_info"><strong>player_info</strong></a>(self)</dt><dd><tt>Setting&nbsp;up&nbsp;player&nbsp;information&nbsp;and&nbsp;blitting&nbsp;it&nbsp;on&nbsp;the&nbsp;screen</tt></dd></dl>
+
+<dl><dt><a name="Game-run"><strong>run</strong></a>(self)</dt><dd><tt>Runs&nbsp;an&nbsp;instance&nbsp;of&nbsp;itself...</tt></dd></dl>
+
+<dl><dt><a name="Game-setup"><strong>setup</strong></a>(self)</dt><dd><tt>Loads&nbsp;and&nbsp;cuts&nbsp;all&nbsp;the&nbsp;sprite&nbsp;sheets.<br>
+Makes&nbsp;all&nbsp;instances&nbsp;of&nbsp;the&nbsp;needed&nbsp;objects&nbsp;and&nbsp;puts&nbsp;them&nbsp;in&nbsp;their&nbsp;<br>
+respective&nbsp;groups&nbsp;and&nbsp;lists<br>
+&nbsp;<br>
+Calling&nbsp;this&nbsp;method&nbsp;will&nbsp;effectively&nbsp;reset&nbsp;the&nbsp;game&nbsp;to&nbsp;it's&nbsp;initial&nbsp;state</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>AMMONUM</strong> = 1<br>
+<strong>ASTEROIDSMAXSPEED</strong> = 4<br>
+<strong>ASTEROIDSMINSPEED</strong> = 2<br>
+<strong>ASTEROIDSNUM</strong> = 6<br>
+<strong>BLACK</strong> = (0, 0, 0)<br>
+<strong>BLACKHOLEPOS</strong> = Vector(X: 600, Y: 350)<br>
+<strong>BLUE</strong> = (0, 0, 255)<br>
+<strong>BROWN</strong> = (138, 115, 76)<br>
+<strong>BULLETSPEED</strong> = 15<br>
+<strong>CAPTION</strong> = 'Space Shooter'<br>
+<strong>DARKBLUE</strong> = (0, 0, 255)<br>
+<strong>DARKGREEN</strong> = (0, 204, 0)<br>
+<strong>DEBUG</strong> = False<br>
+<strong>FPS</strong> = 60<br>
+<strong>FUELNUM</strong> = 1<br>
+<strong>GAME_STATE</strong> = True<br>
+<strong>GRAVITY</strong> = 100<br>
+<strong>GREEN</strong> = (0, 255, 0)<br>
+<strong>GREY</strong> = (160, 160, 160)<br>
+<strong>HEALTHNUM</strong> = 1<br>
+<strong>INVINCIBLETIME</strong> = 4<br>
+<strong>LIGHTBLUE</strong> = (0, 128, 255)<br>
+<strong>LIGHTGREEN</strong> = (128, 255, 0)<br>
+<strong>ORANGE</strong> = (255, 128, 0)<br>
+<strong>P1DEADPOS</strong> = (-500, -500)<br>
+<strong>P1STARTANGLE</strong> = 0<br>
+<strong>P1STARTPOS</strong> = (50, 350)<br>
+<strong>P2DEADPOS</strong> = (1700, 1200)<br>
+<strong>P2STARTANGLE</strong> = 180<br>
+<strong>P2STARTPOS</strong> = (1150, 350)<br>
+<strong>PINK</strong> = (255, 0, 255)<br>
+<strong>PLAYERMAXSPEED</strong> = 4<br>
+<strong>PURPLE</strong> = (128, 0, 255)<br>
+<strong>RED</strong> = (255, 0, 0)<br>
+<strong>SCREENHEIGHT</strong> = 700<br>
+<strong>SCREENWIDTH</strong> = 1200<br>
+<strong>TEAL</strong> = (0, 255, 255)<br>
+<strong>TIMETORESPAWN</strong> = 3<br>
+<strong>WARMPINK</strong> = (255, 0, 128)<br>
+<strong>WEAPONUPCHANCE</strong> = 10<br>
+<strong>WEAPONUPTIME</strong> = 10<br>
+<strong>WHITE</strong> = (255, 255, 255)<br>
+<strong>YELLOW</strong> = (255, 255, 0)<br>
+<strong>ship_image_list</strong> = ['images/ship1.png', 'images/ship2.png', 'images/ship3.png', 'images/ship4.png']</td></tr></table>
+</body></html>

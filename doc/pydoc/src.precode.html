@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module precode</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>precode</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/raymon/src/Space-Shooter/src/precode.py">/home/raymon/src/Space-Shooter/src/precode.py</a></font></td></tr></table>
+    <p><tt>Pre-code&nbsp;for&nbsp;INF-1400<br>
+&nbsp;<br>
+22&nbsp;January&nbsp;2012&nbsp;Revision&nbsp;2&nbsp;(Martin&nbsp;Ernstsen):<br>
+Reraise&nbsp;exception&nbsp;after&nbsp;showing&nbsp;error&nbsp;message.<br>
+&nbsp;<br>
+11&nbsp;February&nbsp;2011&nbsp;Revision&nbsp;1&nbsp;(Martin&nbsp;Ernstsen):<br>
+Fixed&nbsp;bug&nbsp;in&nbsp;intersect_circle.&nbsp;Updated&nbsp;docstrings&nbsp;to&nbsp;Python&nbsp;standard.<br>
+Improved&nbsp;__mul__.&nbsp;Added&nbsp;some&nbsp;exception&nbsp;handling.&nbsp;Put&nbsp;example&nbsp;code&nbsp;in&nbsp;separate<br>
+function.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="math.html">math</a><br>
+</td><td width="25%" valign=top><a href="pygame.html">pygame</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="precode.html#Vector2D">Vector2D</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Vector2D">class <strong>Vector2D</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Implements&nbsp;a&nbsp;two&nbsp;dimensional&nbsp;vector.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Vector2D-__add__"><strong>__add__</strong></a>(self, b)</dt><dd><tt>Addition.&nbsp;Returns&nbsp;a&nbsp;new&nbsp;vector.</tt></dd></dl>
+
+<dl><dt><a name="Vector2D-__init__"><strong>__init__</strong></a>(self, x, y)</dt></dl>
+
+<dl><dt><a name="Vector2D-__iter__"><strong>__iter__</strong></a>(self)</dt><dd><tt>returns&nbsp;the&nbsp;position</tt></dd></dl>
+
+<dl><dt><a name="Vector2D-__mul__"><strong>__mul__</strong></a>(self, b)</dt><dd><tt>Multiplication&nbsp;by&nbsp;a&nbsp;scalar</tt></dd></dl>
+
+<dl><dt><a name="Vector2D-__nonzero__"><strong>__nonzero__</strong></a>(self)</dt><dd><tt>Makes&nbsp;<a href="#Vector2D">Vector2D</a>(0,0)&nbsp;evaluate&nbsp;to&nbsp;False,&nbsp;all&nbsp;other&nbsp;vectors&nbsp;evaluate&nbsp;to&nbsp;True</tt></dd></dl>
+
+<dl><dt><a name="Vector2D-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Vector2D-__rmul__"><strong>__rmul__</strong></a>(self, b)</dt></dl>
+
+<dl><dt><a name="Vector2D-__sub__"><strong>__sub__</strong></a>(self, b)</dt><dd><tt>Subtraction.&nbsp;Returns&nbsp;a&nbsp;new&nbsp;vector.</tt></dd></dl>
+
+<dl><dt><a name="Vector2D-__truediv__"><strong>__truediv__</strong></a>(self, b)</dt><dd><tt>Multiplication&nbsp;by&nbsp;a&nbsp;scalar</tt></dd></dl>
+
+<dl><dt><a name="Vector2D-copy"><strong>copy</strong></a>(self)</dt><dd><tt>Returns&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;vector.</tt></dd></dl>
+
+<dl><dt><a name="Vector2D-magnitude"><strong>magnitude</strong></a>(self)</dt><dd><tt>Returns&nbsp;the&nbsp;magnitude&nbsp;of&nbsp;the&nbsp;vector.</tt></dd></dl>
+
+<dl><dt><a name="Vector2D-normalized"><strong>normalized</strong></a>(self)</dt><dd><tt>Returns&nbsp;a&nbsp;new&nbsp;vector&nbsp;with&nbsp;the&nbsp;same&nbsp;direction&nbsp;but&nbsp;magnitude&nbsp;1.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-example2"><strong>example2</strong></a>()</dt></dl>
+ <dl><dt><a name="-example_code"><strong>example_code</strong></a>()</dt><dd><tt>Example&nbsp;showing&nbsp;the&nbsp;use&nbsp;of&nbsp;the&nbsp;above&nbsp;code.</tt></dd></dl>
+ <dl><dt><a name="-intersect_circles"><strong>intersect_circles</strong></a>(a_pos, a_radius, b_pos, b_radius)</dt><dd><tt>Determine&nbsp;if&nbsp;two&nbsp;circles&nbsp;intersect.<br>
+&nbsp;<br>
+Parameters:<br>
+a_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;A&nbsp;<a href="#Vector2D">Vector2D</a>&nbsp;representing&nbsp;circle&nbsp;A's&nbsp;position<br>
+a_radius&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Circle&nbsp;A's&nbsp;radius<br>
+b_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;A&nbsp;<a href="#Vector2D">Vector2D</a>&nbsp;representing&nbsp;circle&nbsp;B's&nbsp;position<br>
+b_radius&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Circle&nbsp;B's&nbsp;radius<br>
+&nbsp;<br>
+Returns:<br>
+False&nbsp;if&nbsp;no&nbsp;intersection.&nbsp;If&nbsp;the&nbsp;circles&nbsp;intersect,&nbsp;returns&nbsp;a&nbsp;normalized<br>
+<a href="#Vector2D">Vector2D</a>&nbsp;pointing&nbsp;from&nbsp;circle&nbsp;A&nbsp;to&nbsp;circle&nbsp;B.</tt></dd></dl>
+ <dl><dt><a name="-intersect_rectangle_circle"><strong>intersect_rectangle_circle</strong></a>(rec_pos, sx, sy, circle_pos, circle_radius, circle_speed)</dt><dd><tt>Determine&nbsp;if&nbsp;a&nbsp;rectangle&nbsp;and&nbsp;a&nbsp;circle&nbsp;intersects.<br>
+&nbsp;<br>
+Only&nbsp;works&nbsp;for&nbsp;a&nbsp;rectangle&nbsp;aligned&nbsp;with&nbsp;the&nbsp;axes.<br>
+&nbsp;<br>
+Parameters:<br>
+rec_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;A&nbsp;<a href="#Vector2D">Vector2D</a>&nbsp;representing&nbsp;the&nbsp;position&nbsp;of&nbsp;the&nbsp;rectangles&nbsp;upper,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left&nbsp;corner.<br>
+sx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Width&nbsp;of&nbsp;rectangle.<br>
+sy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Height&nbsp;of&nbsp;rectangle.<br>
+circle_pos&nbsp;&nbsp;-&nbsp;A&nbsp;<a href="#Vector2D">Vector2D</a>&nbsp;representing&nbsp;the&nbsp;circle's&nbsp;position.<br>
+circle_radius&nbsp;-&nbsp;The&nbsp;circle's&nbsp;radius.<br>
+circle_speed&nbsp;-&nbsp;A&nbsp;<a href="#Vector2D">Vector2D</a>&nbsp;representing&nbsp;the&nbsp;circles&nbsp;speed.<br>
+&nbsp;<br>
+Returns:<br>
+False&nbsp;if&nbsp;no&nbsp;intersection.&nbsp;If&nbsp;the&nbsp;rectangle&nbsp;and&nbsp;the&nbsp;circle&nbsp;intersect,&nbsp;returns<br>
+a&nbsp;normalized&nbsp;<a href="#Vector2D">Vector2D</a>&nbsp;pointing&nbsp;in&nbsp;the&nbsp;direction&nbsp;the&nbsp;circle&nbsp;will&nbsp;move&nbsp;after<br>
+the&nbsp;collision.</tt></dd></dl>
+</td></tr></table>
+</body></html>
