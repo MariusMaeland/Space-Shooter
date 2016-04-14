@@ -29,14 +29,15 @@ Getting hit by an asteroid will loose you 20 hp!
 Asteroids will stop bullets but are destroyed after three hits.
 
 If your hp reaches 0, you die(obviously).
-After you respawn, you will have a 4 second period in which you are invincible.
+After you respawn, you will have a 4 second period in which you are invincible(YELLOW health bar).
 During this period you hp- bar is yeallow
 
 Both fuel, health and ammo can be refilled by grabbing the various crystals around the black hole.
 
 RED crystals - grants 10 to 60 hp.
 GREEN crystals - grants 30 to 60 fuel.
-BLUE crystals - grants 20 bullets.
+BLUE crystals - grants 20 bullets. 
+BLUE crystal also has a 30 % chance of granting a weaponsupgrade with twice the damage! 
 
 ------------
 CONFIG
@@ -46,6 +47,8 @@ GRAVITY - Somewhere between 50 and 300 is managable
 TIMETORESPAWN - Time in seconds to respawn
 INVINCIBLETIME - Duration of invincible time in seconds
 BULLETSPEED - Bullet speed in pixels/frame. 10 - 20 seems good.
+WEAPONUPTIME - Duration of weaponupgrade in seconds
+WEAPONUPCHANCE - In percent
 PLAYERMAXSPEED - Speed in pixel/frame. 4-5 is good.
 ASTEROIDSNUM - Number of asteroids (How long can you survive 40?!) 	
 ASTEROIDSMAXSPEED - Maximum speed of asteroids
